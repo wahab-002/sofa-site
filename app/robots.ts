@@ -3,6 +3,6 @@ import { MetadataRoute } from "next";
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: "https://your-domain.co.uk/sitemap.xml",
+    sitemap: "https://thesofahub.co.uk/sitemap.xml",
   };
 }
