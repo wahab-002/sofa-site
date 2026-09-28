@@ -18,7 +18,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
         <p className="font-body text-charcoal/60 mt-2">£{product.price_gbp}</p>
         <p className="font-body text-charcoal/80 mt-6 leading-relaxed">{product.description}</p>
         <div className="mt-8">
-          <WhatsAppButton productName={product.name} phoneNumber="447000000000" />
+          <WhatsAppButton productName={product.name} phoneNumber="447784123321" />
         </div>
       </div>
     </div>

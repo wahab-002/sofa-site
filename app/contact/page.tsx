@@ -6,7 +6,7 @@ export default function ContactPage() {
         Message us on WhatsApp for delivery times, custom sizes, or to place a cash-on-delivery order.
       </p>
       <a
-        href="https://wa.me/447000000000"
+        href="https://wa.me/447784123321"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-block bg-forest text-linen font-body px-6 py-3 rounded-md hover:bg-charcoal transition-colors"
