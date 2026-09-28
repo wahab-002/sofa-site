@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sofas UK | Quality Corner Sofas, 3 Seater Sofas & More | Your Sofa Co.",
+  title: "Sofas UK | Quality Corner Sofas, 3 Seater Sofas & More | The Sofa Hub",
   description:
     "Shop quality corner sofas, 3 seater sofas, leather sofas and sofa sets with free UK delivery and cash on delivery. Order in minutes over WhatsApp.",
 };

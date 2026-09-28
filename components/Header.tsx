@@ -20,7 +20,7 @@ export default function Header() {
       <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <Link href="/" className="font-display text-xl text-charcoal">
-          Your Sofa Co.
+          The Sofa Hub
         </Link>
 
         {/* Desktop nav */}

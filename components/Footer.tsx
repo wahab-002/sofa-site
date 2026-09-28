@@ -7,7 +7,7 @@ export default function Footer() {
 
         {/* Brand */}
         <div>
-          <p className="font-display text-xl mb-3">Your Sofa Co.</p>
+          <p className="font-display text-xl mb-3">The Sofa Hub</p>
           <p className="text-linen/60 leading-relaxed">
             Quality sofas delivered across the UK. Free delivery and cash on delivery on every order.
           </p>
@@ -47,7 +47,7 @@ export default function Footer() {
       </div>
 
       <div className="max-w-5xl mx-auto px-6 py-4 border-t border-linen/10 text-linen/40 text-xs">
-        <p>© {new Date().getFullYear()} Your Sofa Co. All rights reserved. Cash on delivery available across the UK.</p>
+        <p>© {new Date().getFullYear()} The Sofa Hub All rights reserved. Cash on delivery available across the UK.</p>
       </div>
     </footer>
   );

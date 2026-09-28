@@ -8,7 +8,7 @@ const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Sofas UK | Quality Sofas, Delivered | Your Sofa Co.",
+  title: "Sofas UK | Quality Sofas, Delivered | The Sofa Hub",
   description:
     "Shop quality corner, 3-seater and 3+2 sofa sets with UK delivery and cash on delivery available.",
 };
