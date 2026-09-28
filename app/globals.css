@@ -2,7 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #FAF7F2;
   color: #1C1B1A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium selection colour */
+::selection {
+  background-color: #2F3E33;
+  color: #FAF7F2;
+}
+
+/* Subtle focus ring */
+:focus-visible {
+  outline: 2px solid #2F3E33;
+  outline-offset: 3px;
+  border-radius: 4px;
 }
