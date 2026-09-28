@@ -10,7 +10,7 @@ export type Product = {
   image_url: string;
 };
 
-// Sample data so the site runs before Supabase is populated.
+// Sample data — only used if Supabase is completely unreachable
 export const sampleProducts: Product[] = [
   {
     id: "1",
@@ -20,12 +20,15 @@ export const sampleProducts: Product[] = [
     price_gbp: 799,
     description:
       "A generously sized corner sofa built for family living rooms, upholstered in durable UK-grade fabric with a solid hardwood frame.",
-    image_url: "/ashton-placeholder.jpg",
+    image_url: "/ashton-corner-sofa.jpg",
   },
 ];
 
 export async function getAllProducts(): Promise<Product[]> {
-  const { data, error } = await supabase.from("products").select("*");
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
   if (error || !data || data.length === 0) return sampleProducts;
   return data as Product[];
 }
@@ -44,7 +47,8 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   const { data, error } = await supabase
     .from("products")
     .select("*")
-    .eq("category", category);
+    .eq("category", category)
+    .order("created_at", { ascending: false });
   if (error || !data) return sampleProducts.filter((p) => p.category === category);
   return data as Product[];
 }
