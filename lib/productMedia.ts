@@ -13,13 +13,23 @@ export type MediaPhoto = {
   detail?: boolean;
 };
 
+export type MediaColour = {
+  name: string;
+  hex: string;
+  swatch?: string;
+  closeUp?: string;
+};
+
 export type ProductMedia = {
   styles?: BackStyle[];
+  /** Replaces the database colours when the real range differs from what's stored. */
+  colours?: MediaColour[];
   cardImage: string;
   photos: MediaPhoto[];
 };
 
 const verona = (file: string) => `/products/verona/${file}.webp`;
+const oakland = (file: string) => `/products/oakland/${file}.webp`;
 
 export const productMedia: Record<string, ProductMedia> = {
   "verona-sofa": {
@@ -57,10 +67,46 @@ export const productMedia: Record<string, ProductMedia> = {
       { src: verona("detail-arm-grey"), alt: "Close-up of the Verona's button-tufted scroll arm", colour: "Light Grey", detail: true },
     ],
   },
+
+  "oakland-sofa": {
+    colours: [
+      { name: "Tan", hex: "#9C5A32", swatch: oakland("swatch-tan"), closeUp: oakland("fabric-tan") },
+      { name: "Black", hex: "#2B2927", swatch: oakland("swatch-black"), closeUp: oakland("fabric-black") },
+    ],
+    cardImage: oakland("room-corner-tan"),
+    photos: [
+      { src: oakland("room-corner-tan"), alt: "Oakland corner sofa in tan leather in a bright living room", sizes: ["Corner"], colour: "Tan" },
+      { src: oakland("studio-32-tan"), alt: "Oakland 3+2 sofa set in tan leather", sizes: ["3+2 Set"], colour: "Tan" },
+      { src: oakland("studio-3seater-tan"), alt: "Oakland 3 seater sofa in tan leather", sizes: ["3 Seater"], colour: "Tan" },
+      { src: oakland("studio-2seater-tan"), alt: "Oakland 2 seater sofa in tan leather", sizes: ["2 Seater"], colour: "Tan" },
+      { src: oakland("studio-321-tan"), alt: "Oakland 3+2+1 sofa set in tan leather", sizes: ["3+2+1 Full Set"], colour: "Tan" },
+      { src: oakland("studio-corner-tan"), alt: "Oakland corner sofa in tan leather", sizes: ["Corner"], colour: "Tan" },
+      { src: oakland("room-corner-tan-2"), alt: "Oakland corner sofa in tan leather by a fireplace", sizes: ["Corner"], colour: "Tan" },
+      { src: oakland("studio-armchair-tan"), alt: "Oakland armchair in tan leather", sizes: ["3+2+1 Full Set"], colour: "Tan" },
+
+      { src: oakland("room-2seater-black"), alt: "Oakland 2 seater sofa in black leather in a living room", sizes: ["2 Seater"], colour: "Black" },
+      { src: oakland("studio-32-black"), alt: "Oakland 3+2 sofa set in black leather", sizes: ["3+2 Set"], colour: "Black" },
+      { src: oakland("studio-3seater-black"), alt: "Oakland 3 seater sofa in black leather", sizes: ["3 Seater"], colour: "Black" },
+      { src: oakland("studio-2seater-black"), alt: "Oakland 2 seater sofa in black leather", sizes: ["2 Seater"], colour: "Black" },
+      { src: oakland("studio-321-black"), alt: "Oakland 3+2+1 sofa set in black leather", sizes: ["3+2+1 Full Set"], colour: "Black" },
+      { src: oakland("studio-corner-black"), alt: "Oakland corner sofa in black leather", sizes: ["Corner"], colour: "Black" },
+      { src: oakland("room-2seater-black-2"), alt: "Oakland 2 seater sofa in black leather, front view", sizes: ["2 Seater"], colour: "Black" },
+      { src: oakland("studio-armchair-black"), alt: "Oakland armchair in black leather", sizes: ["3+2+1 Full Set"], colour: "Black" },
+
+      { src: oakland("detail-studs-tan"), alt: "Close-up of the Oakland's studded scroll arm", colour: "Tan", detail: true },
+      { src: oakland("detail-seat-tan"), alt: "Close-up of the Oakland's seat cushions and button-tufted front", colour: "Tan", detail: true },
+      { src: oakland("detail-arm-tan"), alt: "Close-up of the Oakland armchair's arm and turned feet", colour: "Tan", detail: true },
+    ],
+  },
 };
 
 export function getProductMedia(slug: string): ProductMedia | null {
   return productMedia[slug] ?? null;
+}
+
+export function mediaColours<T>(slug: string, fallback: T[], map: (c: MediaColour, i: number) => T): T[] {
+  const colours = productMedia[slug]?.colours;
+  return colours ? colours.map(map) : fallback;
 }
 
 /**

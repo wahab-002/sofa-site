@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { getProductMedia, rankPhotos, type BackStyle } from "@/lib/productMedia";
 import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import WhatsAppButton from "./WhatsAppButton";
-import ProductGallery, { fabricTexture } from "./product/ProductGallery";
+import ProductGallery, { fabricTexture, swatchStyle } from "./product/ProductGallery";
 import Icon, { WhatsAppIcon } from "./Icon";
 import { variantIllustration } from "@/lib/illustration";
 import { fabricInfo, formatPrice, whatsappLink } from "@/lib/site";
@@ -187,7 +187,10 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
                           active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
                         }`}
                       >
-                        <span className="h-9 w-9 flex-shrink-0 rounded-lg ring-1 ring-charcoal/10" style={fabricTexture(f.name, selectedColour?.hex_code ?? "#B0ADA8")} />
+                        <span
+                          className="h-9 w-9 flex-shrink-0 rounded-lg ring-1 ring-charcoal/10"
+                          style={selectedColour?.swatch_url ? swatchStyle(selectedColour) : fabricTexture(f.name, selectedColour?.hex_code ?? "#B0ADA8")}
+                        />
                         <span>
                           <span className="block font-body text-sm font-semibold text-charcoal">{f.name}</span>
                           {fabricInfo[f.name] && <span className="block font-body text-xs text-charcoal/50">{fabricInfo[f.name]}</span>}
@@ -204,6 +207,23 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
                 <div className="flex flex-wrap gap-2">
                   {colours.map((c) => {
                     const active = selectedColour?.id === c.id;
+                    if (c.swatch_url) {
+                      return (
+                        <button
+                          key={c.id}
+                          onClick={() => setSelectedColour(c)}
+                          aria-pressed={active}
+                          className={`flex items-center gap-3 rounded-2xl border py-2 pl-2 pr-4 text-left transition-all ${
+                            active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
+                          }`}
+                        >
+                          <span className="relative h-11 w-11 flex-shrink-0 rounded-xl ring-1 ring-inset ring-charcoal/15" style={swatchStyle(c)}>
+                            {active && <Icon name="check" strokeWidth={2.6} className="absolute inset-0 m-auto h-5 w-5 text-white drop-shadow" />}
+                          </span>
+                          <span className="font-body text-sm font-semibold text-charcoal">{c.name}</span>
+                        </button>
+                      );
+                    }
                     return (
                       <button
                         key={c.id}

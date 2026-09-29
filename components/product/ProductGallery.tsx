@@ -17,6 +17,12 @@ type Props = {
   sizeLabel: string | null;
 };
 
+export function swatchStyle(colour: { hex_code: string; swatch_url?: string | null }): React.CSSProperties {
+  return colour.swatch_url
+    ? { backgroundColor: colour.hex_code, backgroundImage: `url(${colour.swatch_url})`, backgroundSize: "cover", backgroundPosition: "center" }
+    : { backgroundColor: colour.hex_code };
+}
+
 export function fabricTexture(fabric: string | null, hex: string): React.CSSProperties {
   const base = { backgroundColor: hex };
   switch (fabric) {
@@ -67,7 +73,11 @@ export default function ProductGallery({ productName, images, media, colour, fab
       <div className="space-y-3">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-sand">
           {showingFabric ? (
-            <div className="absolute inset-0 transition-colors duration-500" style={fabricTexture(fabric, hex)} />
+            colour?.close_up_url ? (
+              <Image key={colour.close_up_url} src={colour.close_up_url} alt={`${colour.name} close-up`} fill sizes="(max-width: 1024px) 100vw, 55vw" className="animate-fade-in object-cover" />
+            ) : (
+              <div className="absolute inset-0 transition-colors duration-500" style={fabricTexture(fabric, hex)} />
+            )
           ) : (
             <Image
               key={current.src}
@@ -81,7 +91,7 @@ export default function ProductGallery({ productName, images, media, colour, fab
           )}
           {(colourMismatch || showingFabric) && colour && (
             <p className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-white/90 py-1.5 pl-2 pr-3 font-body text-xs text-charcoal shadow-soft backdrop-blur md:bottom-4 md:left-4">
-              <span className="h-4 w-4 flex-shrink-0 rounded-full ring-1 ring-charcoal/15" style={{ backgroundColor: hex }} />
+              <span className="h-4 w-4 flex-shrink-0 rounded-full ring-1 ring-charcoal/15" style={swatchStyle(colour)} />
               {showingFabric ? (
                 <span>
                   {colour.name}
@@ -115,7 +125,11 @@ export default function ProductGallery({ productName, images, media, colour, fab
             }`}
             aria-label={`Show ${colour?.name ?? ""} fabric close-up`}
           >
-            <span className="absolute inset-0" style={fabricTexture(fabric, hex)} />
+            {colour?.close_up_url ? (
+              <Image src={colour.close_up_url} alt="" fill sizes="96px" className="object-cover" />
+            ) : (
+              <span className="absolute inset-0" style={fabricTexture(fabric, hex)} />
+            )}
             <span className="absolute inset-x-1 bottom-1 rounded-md bg-white/85 py-0.5 text-center font-body text-[10px] font-medium text-charcoal">
               Fabric
             </span>

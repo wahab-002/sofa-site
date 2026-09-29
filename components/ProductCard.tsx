@@ -8,6 +8,7 @@ import SofaIllustration from "./SofaIllustration";
 import Icon from "./Icon";
 import { cardColour, cardIllustration } from "@/lib/illustration";
 import { formatPrice } from "@/lib/site";
+import { swatchStyle } from "./product/ProductGallery";
 
 const designLabel: Record<string, string> = {
   chesterfield: "Chesterfield",
@@ -76,7 +77,7 @@ export default function ProductCard({ product, index = 0 }: { product: ProductSu
                 className={`h-4 w-4 rounded-full ring-1 ring-charcoal/15 transition-transform hover:scale-125 ${
                   !product.image && colour === c.hex_code ? "ring-2 ring-charcoal/60 ring-offset-1" : ""
                 }`}
-                style={{ backgroundColor: c.hex_code }}
+                style={swatchStyle(c)}
               />
             ))}
             {extraColours > 0 && <span className="font-body text-xs text-charcoal/50">+{extraColours}</span>}

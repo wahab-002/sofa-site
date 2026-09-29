@@ -35,6 +35,8 @@ export type ProductColour = {
   product_id: string;
   name: string;
   hex_code: string;
+  swatch_url?: string | null;
+  close_up_url?: string | null;
   in_stock: boolean;
 };
 
@@ -66,7 +68,7 @@ export type ProductWithDetails = Product & {
 };
 
 export type ProductSummary = Product & {
-  colours: { name: string; hex_code: string }[];
+  colours: { name: string; hex_code: string; swatch_url: string | null }[];
   from_price: number;
   set_price: number | null;
   image: { url: string; alt: string | null } | null;

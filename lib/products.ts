@@ -1,6 +1,6 @@
 import { supabase } from "./supabase";
 import type { Product, ProductSummary, ProductWithDetails } from "./types";
-import { getProductMedia } from "./productMedia";
+import { getProductMedia, mediaColours, productMedia } from "./productMedia";
 
 function cardImage(slug: string, name: string) {
   const media = getProductMedia(slug);
@@ -25,7 +25,11 @@ function toSummary(row: SummaryRow): ProductSummary {
   );
   return {
     ...product,
-    colours: (product_colours ?? []).filter((c) => c.in_stock).map(({ name, hex_code }) => ({ name, hex_code })),
+    colours: mediaColours(
+      product.slug,
+      (product_colours ?? []).filter((c) => c.in_stock).map(({ name, hex_code }) => ({ name, hex_code, swatch_url: null })),
+      (c) => ({ name: c.name, hex_code: c.hex, swatch_url: c.swatch ?? null }),
+    ),
     from_price: prices.length ? Math.min(...prices) : product.base_price,
     set_price: variants.find((v) => v.label === "3+2 Set")?.price_gbp ?? null,
     image: images[0]
@@ -68,7 +72,15 @@ export async function getProductBySlug(slug: string): Promise<ProductWithDetails
   return {
     ...product,
     variants: variants.data || [],
-    colours: colours.data || [],
+    colours: mediaColours(product.slug, colours.data || [], (c) => ({
+      id: `${product.slug}-${c.name.toLowerCase()}`,
+      product_id: product.id,
+      name: c.name,
+      hex_code: c.hex,
+      swatch_url: c.swatch ?? null,
+      close_up_url: c.closeUp ?? null,
+      in_stock: true,
+    })),
     fabrics: fabrics.data || [],
     images: images.data || [],
     extras: extras.data || [],
@@ -124,7 +136,7 @@ export async function getProductsByColour(colour: string): Promise<ProductSummar
     "cream-sofas": ["Cream", "Beige"],
     "navy-sofas": ["Navy"],
     "black-sofas": ["Black"],
-    "brown-sofas": ["Brown", "Brown (Tech Leather)", "Chocolate"],
+    "brown-sofas": ["Brown", "Brown (Tech Leather)", "Chocolate", "Tan"],
   };
   const names = colourMap[colour] || [];
   if (names.length === 0) return [];
@@ -135,17 +147,24 @@ export async function getProductsByColour(colour: string): Promise<ProductSummar
     .in("name", names);
   if (error || !colours) return [];
 
-  const ids = [...new Set(colours.map((c) => c.product_id))];
-  if (ids.length === 0) return [];
+  const overridden = Object.entries(productMedia).filter(([, m]) => m.colours);
+  const matchingSlugs = overridden.filter(([, m]) => m.colours!.some((c) => names.includes(c.name))).map(([slug]) => slug);
+  const excludedSlugs = new Set(overridden.map(([slug]) => slug).filter((slug) => !matchingSlugs.includes(slug)));
 
+  const ids = [...new Set(colours.map((c) => c.product_id))];
+  if (ids.length === 0 && matchingSlugs.length === 0) return [];
+
+  const filters = [ids.length && `id.in.(${ids.join(",")})`, matchingSlugs.length && `slug.in.(${matchingSlugs.join(",")})`]
+    .filter(Boolean)
+    .join(",");
   const { data, error: err2 } = await supabase
     .from("products")
     .select(SUMMARY_SELECT)
-    .in("id", ids)
+    .or(filters)
     .eq("in_stock", true)
     .order("featured", { ascending: false });
   if (err2) return [];
-  return toSummaries(data);
+  return toSummaries(data).filter((p) => !excludedSlugs.has(p.slug));
 }
 
 export async function getRecommendations(currentSlug: string, limit = 4): Promise<ProductSummary[]> {
