@@ -1,5 +1,11 @@
 import { supabase } from "./supabase";
 import type { Product, ProductSummary, ProductWithDetails } from "./types";
+import { getProductMedia } from "./productMedia";
+
+function cardImage(slug: string, name: string) {
+  const media = getProductMedia(slug);
+  return media ? { url: media.cardImage, alt: name } : null;
+}
 
 const SUMMARY_SELECT =
   "*, product_colours(name, hex_code, in_stock), product_variants(label, price_gbp, in_stock), product_images(image_url, alt_text, is_primary, sort_order)";
@@ -22,7 +28,9 @@ function toSummary(row: SummaryRow): ProductSummary {
     colours: (product_colours ?? []).filter((c) => c.in_stock).map(({ name, hex_code }) => ({ name, hex_code })),
     from_price: prices.length ? Math.min(...prices) : product.base_price,
     set_price: variants.find((v) => v.label === "3+2 Set")?.price_gbp ?? null,
-    image: images[0] ? { url: images[0].image_url, alt: images[0].alt_text } : null,
+    image: images[0]
+      ? { url: images[0].image_url, alt: images[0].alt_text }
+      : cardImage(product.slug, product.name),
   };
 }
 

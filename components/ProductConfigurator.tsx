@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
+import { getProductMedia, rankPhotos, type BackStyle } from "@/lib/productMedia";
 import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import WhatsAppButton from "./WhatsAppButton";
 import ProductGallery, { fabricTexture } from "./product/ProductGallery";
@@ -20,9 +22,26 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
 
   const defaultVariant = variants.find((v) => v.label === "3+2 Set") ?? variants[0] ?? null;
   const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
-  const [selectedColour, setSelectedColour] = useState(colours[0] ?? null);
+  const media = getProductMedia(product.slug);
+  const photographedColour = colours.find((c) => c.name === media?.photos[0]?.colour);
+  const [selectedColour, setSelectedColour] = useState(photographedColour ?? colours[0] ?? null);
   const [selectedFabric, setSelectedFabric] = useState(fabrics[0] ?? null);
   const [selectedExtras, setSelectedExtras] = useState<ProductExtra[]>([]);
+
+  const styles = media?.styles ?? [];
+  const [selectedStyle, setSelectedStyle] = useState<BackStyle | null>(styles[0] ?? null);
+
+  const galleryPhotos = useMemo(
+    () =>
+      media
+        ? rankPhotos(media.photos, {
+            style: selectedStyle?.id,
+            size: selectedVariant?.label,
+            colour: selectedColour?.name,
+          })
+        : undefined,
+    [media, selectedStyle, selectedVariant, selectedColour],
+  );
 
   const totalPrice = useMemo(() => {
     let total = selectedVariant?.price_gbp ?? basePrice;
@@ -40,6 +59,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
     return [
       `Hi, I'd like to order the ${productName}.`,
       selectedVariant ? `Size: ${selectedVariant.label}` : "",
+      selectedStyle ? `Back style: ${selectedStyle.name}` : "",
       selectedColour ? `Colour: ${selectedColour.name}` : "",
       selectedFabric ? `Fabric: ${selectedFabric.name}` : "",
       selectedExtras.length > 0
@@ -50,7 +70,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
     ]
       .filter(Boolean)
       .join("\n");
-  }, [productName, selectedVariant, selectedColour, selectedFabric, selectedExtras, totalPrice]);
+  }, [productName, selectedVariant, selectedStyle, selectedColour, selectedFabric, selectedExtras, totalPrice]);
 
   const spec = variantIllustration(product, selectedVariant);
   let step = 0;
@@ -59,10 +79,12 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
     <>
       <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
         {/* Gallery */}
-        <div className="lg:sticky lg:top-28 lg:self-start">
+        <div className="min-w-0 lg:sticky lg:top-28 lg:self-start">
           <ProductGallery
             productName={productName}
             images={product.images}
+            media={galleryPhotos}
+            resetKey={`${selectedStyle?.id}-${selectedVariant?.id}`}
             colour={selectedColour}
             fabric={selectedFabric?.name ?? null}
             spec={spec}
@@ -71,7 +93,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
         </div>
 
         {/* Details */}
-        <div>
+        <div className="min-w-0">
           <p className="eyebrow">{badge}</p>
           <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-charcoal md:text-5xl">{productName}</h1>
           <p className="mt-2 font-body text-lg text-charcoal/60">{product.tagline}</p>
@@ -106,6 +128,45 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
                         )}
                         <span className="block font-body text-sm font-semibold text-charcoal">{v.label}</span>
                         <span className="mt-0.5 block font-body text-sm text-charcoal/60">{formatPrice(v.price_gbp)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
+            )}
+
+            {media && styles.length > 1 && (
+              <Section step={++step} title="Choose your back style" value={selectedStyle?.name}>
+                <div className="grid grid-cols-2 gap-2 md:gap-3">
+                  {styles.map((s) => {
+                    const active = selectedStyle?.id === s.id;
+                    const preview =
+                      rankPhotos(media.photos, { style: s.id, size: selectedVariant?.label, colour: selectedColour?.name }).find(
+                        (p) => p.style === s.id,
+                      ) ?? null;
+                    return (
+                      <button
+                        key={s.id}
+                        onClick={() => setSelectedStyle(s)}
+                        aria-pressed={active}
+                        className={`overflow-hidden rounded-2xl border text-left transition-all ${
+                          active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
+                        }`}
+                      >
+                        {preview && (
+                          <span className="relative block aspect-[16/9] bg-sand">
+                            <Image src={preview.src} alt="" fill sizes="(max-width: 1024px) 45vw, 20vw" className="object-cover" />
+                            {active && (
+                              <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-charcoal text-linen">
+                                <Icon name="check" className="h-3.5 w-3.5" strokeWidth={2.8} />
+                              </span>
+                            )}
+                          </span>
+                        )}
+                        <span className="block p-3">
+                          <span className="block font-body text-sm font-semibold text-charcoal">{s.name}</span>
+                          <span className="mt-0.5 block font-body text-xs leading-snug text-charcoal/55">{s.description}</span>
+                        </span>
                       </button>
                     );
                   })}
@@ -216,6 +277,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
               <li className="flex justify-between">
                 <span>
                   {selectedVariant?.label ?? productName}
+                  {selectedStyle && ` · ${selectedStyle.name}`}
                   {selectedColour && ` · ${selectedColour.name}`}
                   {selectedFabric && ` · ${selectedFabric.name}`}
                 </span>
@@ -258,7 +320,8 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
         <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="truncate font-body text-xs text-charcoal/55">
-              {selectedVariant?.label} · {selectedColour?.name}
+              {selectedVariant?.label}
+              {selectedStyle && ` · ${selectedStyle.name}`} · {selectedColour?.name}
             </p>
             <p className="font-display text-xl font-semibold text-charcoal">{formatPrice(totalPrice)}</p>
           </div>

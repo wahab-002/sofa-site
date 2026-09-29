@@ -8,6 +8,7 @@ import Icon from "@/components/Icon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { getProductMedia } from "@/lib/productMedia";
 
 export const dynamic = "force-dynamic";
 
@@ -22,9 +23,16 @@ const designMeta: Record<string, { label: string; href: string; collection: stri
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductBySlug(params.slug);
   if (!product) return {};
+  const title = `${product.name} | The Sofa Hub — UK Sofas with Free Delivery`;
+  const description = `${product.tagline} ${product.description.slice(0, 120)}... From £${product.base_price}. Free UK delivery & cash on delivery.`;
+  const photo = product.images[0]?.image_url ?? getProductMedia(product.slug)?.cardImage;
   return {
-    title: `${product.name} | The Sofa Hub — UK Sofas with Free Delivery`,
-    description: `${product.tagline} ${product.description.slice(0, 120)}... From £${product.base_price}. Free UK delivery & cash on delivery.`,
+    title,
+    description,
+    ...(photo && {
+      openGraph: { title, description, images: [{ url: photo, alt: product.name }] },
+      twitter: { card: "summary_large_image", images: [photo] },
+    }),
   };
 }
 
@@ -44,6 +52,7 @@ export default async function ProductPage({ params }: Props) {
   const design = designMeta[product.design_type];
   const fromPrice = product.variants.length ? Math.min(...product.variants.map((v) => v.price_gbp)) : product.base_price;
   const fabricNames = product.fabrics.map((f) => f.name).join(", ");
+  const backStyles = getProductMedia(product.slug)?.styles ?? [];
 
   const details = [
     {
@@ -64,6 +73,9 @@ export default async function ProductPage({ params }: Props) {
           <li className="pt-2">
             Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"} and {fabricNames}.
           </li>
+          {backStyles.length > 1 && (
+            <li>Choose a {backStyles.map((s) => s.name).join(" or ")} design at the same price.</li>
+          )}
         </ul>
       ),
     },

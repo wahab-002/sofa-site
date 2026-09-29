@@ -3,3 +3,6 @@ node_modules
 .env.local
 .DS_Store
 *.tsbuildinfo
+
+# raw supplier photos (optimised copies live in public/products)
+/photos

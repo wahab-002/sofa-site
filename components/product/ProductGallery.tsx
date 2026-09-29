@@ -4,10 +4,13 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import type { ProductColour, ProductImage } from "@/lib/types";
 import SofaIllustration, { type IllustrationSpec } from "@/components/SofaIllustration";
+import type { MediaPhoto } from "@/lib/productMedia";
 
 type Props = {
   productName: string;
   images: ProductImage[];
+  media?: MediaPhoto[];
+  resetKey?: string;
   colour: ProductColour | null;
   fabric: string | null;
   spec: IllustrationSpec;
@@ -39,49 +42,85 @@ export function fabricTexture(fabric: string | null, hex: string): React.CSSProp
   }
 }
 
-export default function ProductGallery({ productName, images, colour, fabric, spec, sizeLabel }: Props) {
-  const photos = useMemo(() => {
-    if (!colour) return images;
-    const matching = images.filter((img) => img.colour_id === colour.id || img.colour_id === null);
-    return matching.length > 0 ? matching : images;
-  }, [images, colour]);
+export default function ProductGallery({ productName, images, media, colour, fabric, spec, sizeLabel, resetKey }: Props) {
+  const photos = useMemo<MediaPhoto[]>(() => {
+    if (media && media.length > 0) return media;
+    const matching = colour ? images.filter((img) => img.colour_id === colour.id || img.colour_id === null) : images;
+    return (matching.length > 0 ? matching : images).map((img) => ({
+      src: img.image_url,
+      alt: img.alt_text ?? `${productName}${colour ? ` in ${colour.name}` : ""}`,
+    }));
+  }, [media, images, colour, productName]);
 
   const [active, setActive] = useState(0);
-  useEffect(() => setActive(0), [colour?.id]);
+  useEffect(() => setActive(0), [colour?.id, resetKey]);
 
   const hex = colour?.hex_code ?? "#B0ADA8";
 
   if (photos.length > 0) {
+    const fabricIndex = photos.length;
+    const showingFabric = active === fabricIndex;
     const current = photos[Math.min(active, photos.length - 1)];
+    const colourMismatch = !showingFabric && !!colour && !!current.colour && current.colour !== colour.name;
+
     return (
       <div className="space-y-3">
         <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-sand">
-          <Image
-            key={current.id}
-            src={current.image_url}
-            alt={current.alt_text ?? `${productName}${colour ? ` in ${colour.name}` : ""}`}
-            fill
-            priority
-            sizes="(max-width: 1024px) 100vw, 55vw"
-            className="animate-fade-in object-cover"
-          />
+          {showingFabric ? (
+            <div className="absolute inset-0 transition-colors duration-500" style={fabricTexture(fabric, hex)} />
+          ) : (
+            <Image
+              key={current.src}
+              src={current.src}
+              alt={current.alt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="animate-fade-in object-cover"
+            />
+          )}
+          {(colourMismatch || showingFabric) && colour && (
+            <p className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-white/90 py-1.5 pl-2 pr-3 font-body text-xs text-charcoal shadow-soft backdrop-blur md:bottom-4 md:left-4">
+              <span className="h-4 w-4 flex-shrink-0 rounded-full ring-1 ring-charcoal/15" style={{ backgroundColor: hex }} />
+              {showingFabric ? (
+                <span>
+                  {colour.name}
+                  {fabric && <span className="text-charcoal/50"> · {fabric}</span>}
+                </span>
+              ) : (
+                <span>
+                  Shown in {current.colour}. <span className="font-semibold">Yours will be made in {colour.name}.</span>
+                </span>
+              )}
+            </p>
+          )}
         </div>
-        {photos.length > 1 && (
-          <div className="no-scrollbar flex gap-3 overflow-x-auto">
-            {photos.map((img, i) => (
-              <button
-                key={img.id}
-                onClick={() => setActive(i)}
-                className={`relative aspect-[4/3] w-24 flex-shrink-0 overflow-hidden rounded-xl bg-sand ring-2 transition md:w-28 ${
-                  i === active ? "ring-charcoal" : "ring-transparent opacity-70 hover:opacity-100"
-                }`}
-                aria-label={`Show image ${i + 1}`}
-              >
-                <Image src={img.image_url} alt={img.alt_text ?? productName} fill sizes="112px" className="object-cover" />
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="no-scrollbar flex gap-2.5 overflow-x-auto pb-1 md:gap-3">
+          {photos.map((img, i) => (
+            <button
+              key={img.src}
+              onClick={() => setActive(i)}
+              className={`relative aspect-[4/3] w-20 flex-shrink-0 overflow-hidden rounded-xl bg-sand ring-2 transition md:w-24 ${
+                i === active ? "ring-charcoal" : "ring-transparent opacity-70 hover:opacity-100"
+              }`}
+              aria-label={img.alt}
+            >
+              <Image src={img.src} alt="" fill sizes="96px" className="object-cover" />
+            </button>
+          ))}
+          <button
+            onClick={() => setActive(fabricIndex)}
+            className={`relative aspect-[4/3] w-20 flex-shrink-0 overflow-hidden rounded-xl ring-2 transition md:w-24 ${
+              showingFabric ? "ring-charcoal" : "ring-transparent opacity-70 hover:opacity-100"
+            }`}
+            aria-label={`Show ${colour?.name ?? ""} fabric close-up`}
+          >
+            <span className="absolute inset-0" style={fabricTexture(fabric, hex)} />
+            <span className="absolute inset-x-1 bottom-1 rounded-md bg-white/85 py-0.5 text-center font-body text-[10px] font-medium text-charcoal">
+              Fabric
+            </span>
+          </button>
+        </div>
       </div>
     );
   }

@@ -74,7 +74,7 @@ export default function ProductCard({ product, index = 0 }: { product: ProductSu
                 title={c.name}
                 onMouseEnter={() => setColour(c.hex_code)}
                 className={`h-4 w-4 rounded-full ring-1 ring-charcoal/15 transition-transform hover:scale-125 ${
-                  colour === c.hex_code ? "ring-2 ring-charcoal/60 ring-offset-1" : ""
+                  !product.image && colour === c.hex_code ? "ring-2 ring-charcoal/60 ring-offset-1" : ""
                 }`}
                 style={{ backgroundColor: c.hex_code }}
               />
