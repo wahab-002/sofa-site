@@ -75,7 +75,7 @@ export default function Header() {
         }`}
       >
         <div className="container-site flex h-16 items-center justify-between gap-6 md:h-20">
-          <Logo />
+          <Logo priority />
 
           <nav className="hidden flex-1 items-center justify-center gap-1 font-body text-[15px] text-charcoal/80 lg:flex">
             <div onMouseEnter={openMega} onMouseLeave={closeMega}>

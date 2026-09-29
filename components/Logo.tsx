@@ -1,19 +1,30 @@
 import Link from "next/link";
+import Image from "next/image";
 
-export default function Logo({ light = false }: { light?: boolean }) {
+type Props = {
+  /** Use the white logo on dark backgrounds. */
+  light?: boolean;
+  /** Stacked layout (icon above the name) instead of side by side. */
+  stacked?: boolean;
+  className?: string;
+  priority?: boolean;
+};
+
+export default function Logo({ light = false, stacked = false, className, priority = false }: Props) {
+  const colour = light ? "white" : "dark";
+  const src = stacked ? `/brand/logo-stacked-${colour}.png` : `/brand/logo-horizontal-${colour}.png`;
+  const [width, height] = stacked ? [370, 304] : [488, 100];
+
   return (
-    <Link href="/" className="flex flex-shrink-0 items-center gap-2.5" aria-label="The Sofa Hub home">
-      <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${light ? "bg-linen text-forest" : "bg-forest text-linen"}`}>
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-          <path d="M6 7.5A2.5 2.5 0 0 1 8.5 5h7A2.5 2.5 0 0 1 18 7.5V11H6z" opacity="0.55" />
-          <path d="M3 11.5a2 2 0 0 1 4 0V13h10v-1.5a2 2 0 0 1 4 0V17a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z" />
-          <rect x="5" y="18" width="2" height="2" rx="0.5" />
-          <rect x="17" y="18" width="2" height="2" rx="0.5" />
-        </svg>
-      </span>
-      <span className={`font-display text-xl font-semibold tracking-tight ${light ? "text-linen" : "text-charcoal"}`}>
-        The Sofa Hub
-      </span>
+    <Link href="/" className="flex flex-shrink-0 items-center" aria-label="The Sofa Hub home">
+      <Image
+        src={src}
+        alt="The Sofa Hub — Furniture Store"
+        width={width}
+        height={height}
+        priority={priority}
+        className={className ?? (stacked ? "h-auto w-40" : "h-10 w-auto md:h-12")}
+      />
     </Link>
   );
 }

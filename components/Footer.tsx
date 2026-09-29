@@ -25,7 +25,7 @@ export default function Footer() {
 
       <div className="container-site grid gap-10 py-14 md:grid-cols-12">
         <div className="md:col-span-4">
-          <Logo light />
+          <Logo light stacked />
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-linen/60">
             Quality sofas at honest prices, delivered free across the UK. Order on WhatsApp and pay cash when it arrives.
           </p>
