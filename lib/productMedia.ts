@@ -30,6 +30,7 @@ export type ProductMedia = {
 
 const verona = (file: string) => `/products/verona/${file}.webp`;
 const oakland = (file: string) => `/products/oakland/${file}.webp`;
+const malibu = (file: string) => `/products/malibu/${file}.webp`;
 
 export const productMedia: Record<string, ProductMedia> = {
   "verona-sofa": {
@@ -96,6 +97,23 @@ export const productMedia: Record<string, ProductMedia> = {
       { src: oakland("detail-studs-tan"), alt: "Close-up of the Oakland's studded scroll arm", colour: "Tan", detail: true },
       { src: oakland("detail-seat-tan"), alt: "Close-up of the Oakland's seat cushions and button-tufted front", colour: "Tan", detail: true },
       { src: oakland("detail-arm-tan"), alt: "Close-up of the Oakland armchair's arm and turned feet", colour: "Tan", detail: true },
+    ],
+  },
+
+  "malibu-sofa": {
+    cardImage: malibu("room-32-caramel"),
+    photos: [
+      { src: malibu("room-32-caramel"), alt: "Malibu 3+2 sofa set in dapple caramel in a living room", sizes: ["3+2 Set", "3 Seater", "3+2+1 Full Set"], colour: "Beige" },
+      { src: malibu("showroom-2seater-caramel"), alt: "Malibu 2 seater sofa in dapple caramel with gold feet", sizes: ["2 Seater"], colour: "Beige" },
+      { src: malibu("showroom-32-caramel"), alt: "Malibu 3 seater and 2 seater sofas in dapple caramel", sizes: ["3+2 Set", "3 Seater", "3+2+1 Full Set"], colour: "Beige" },
+      { src: malibu("room-corner-caramel"), alt: "Malibu corner sofa and button-tufted footstool in dapple caramel", sizes: ["Corner"], colour: "Beige" },
+
+      { src: malibu("showroom-2seater-silver"), alt: "Malibu 2 seater sofa in silver", sizes: ["2 Seater"], colour: "Light Grey" },
+      { src: malibu("showroom-32-silver"), alt: "Malibu 3 seater and 2 seater sofas in silver", sizes: ["3+2 Set", "3 Seater", "3+2+1 Full Set"], colour: "Light Grey" },
+      { src: malibu("showroom-corner-silver"), alt: "Malibu corner sofa in silver with matching footstool", sizes: ["Corner"], colour: "Light Grey" },
+      { src: malibu("showroom-corner-silver-2"), alt: "Malibu corner sofa in silver, side view with footstool", sizes: ["Corner"], colour: "Light Grey" },
+
+      { src: malibu("showroom-corner-grey"), alt: "Malibu corner sofa in grey", sizes: ["Corner"], colour: "Dark Grey" },
     ],
   },
 };
