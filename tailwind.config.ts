@@ -12,7 +12,7 @@ const config: Config = {
         gold: "#C9A66B",
       },
       fontFamily: {
-        display: ["var(--font-fraunces)", "serif"],
+        display: ["var(--font-outfit)", "sans-serif"],
         body: ["var(--font-inter)", "sans-serif"],
       },
     },
