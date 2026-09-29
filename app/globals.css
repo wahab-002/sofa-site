@@ -13,15 +13,73 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Premium selection colour */
 ::selection {
   background-color: #2F3E33;
   color: #FAF7F2;
 }
 
-/* Subtle focus ring */
 :focus-visible {
   outline: 2px solid #2F3E33;
   outline-offset: 3px;
   border-radius: 4px;
+}
+
+@layer base {
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-7xl px-5 md:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full font-body font-medium transition-all duration-200 active:scale-[0.98];
+  }
+  .btn-md {
+    @apply px-6 py-3 text-sm;
+  }
+  .btn-lg {
+    @apply px-7 py-4 text-base;
+  }
+  .btn-primary {
+    @apply bg-forest text-linen hover:bg-forest-dark shadow-soft;
+  }
+  .btn-secondary {
+    @apply border border-charcoal/15 bg-white text-charcoal hover:border-charcoal/40;
+  }
+  .btn-light {
+    @apply bg-linen text-charcoal hover:bg-white;
+  }
+
+  .eyebrow {
+    @apply font-body text-xs font-semibold uppercase tracking-[0.16em] text-clay;
+  }
+
+  .section-title {
+    @apply font-display text-3xl font-semibold text-charcoal md:text-4xl;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Smooth recolouring for the sofa illustrations */
+.sofa-art [data-fill] {
+  transition: fill 0.5s ease;
+}
+
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }

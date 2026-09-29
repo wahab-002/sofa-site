@@ -1,5 +1,6 @@
 import { getProductsByDesign } from "@/lib/products";
-import ProductCard from "@/components/ProductCard";
+import CollectionPage from "@/components/CollectionPage";
+import { designCategories } from "@/lib/site";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -27,21 +28,16 @@ export default async function ShopDesignPage({ params }: Props) {
   if (!meta) return notFound();
 
   const products = await getProductsByDesign(params.design);
+  const category = designCategories.find((d) => d.slug === params.design);
 
   return (
-    <div>
-      <div className="mb-10">
-        <h1 className="font-display text-4xl text-charcoal mb-3">{meta.title}</h1>
-        <p className="font-body text-charcoal/60 max-w-xl">{meta.description}</p>
-        <p className="font-body text-sm text-charcoal/40 mt-2">{products.length} sofas available</p>
-      </div>
-      {products.length === 0 ? (
-        <p className="font-body text-charcoal/50">No sofas in this category yet — check back soon.</p>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-      )}
-    </div>
+    <CollectionPage
+      title={category?.label ?? meta.title}
+      description={meta.description}
+      products={products}
+      crumb={category?.label ?? meta.title}
+      activeHref={`/shop/${params.design}`}
+      illustration={category ? { spec: category.illustration, colour: category.colour } : undefined}
+    />
   );
 }

@@ -1,54 +1,106 @@
 import Link from "next/link";
+import Logo from "./Logo";
+import Icon, { WhatsAppIcon } from "./Icon";
+import { WHATSAPP_DISPLAY, colourCategories, designCategories, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-charcoal/10 mt-20 bg-charcoal text-linen">
-      <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 font-body text-sm">
-
-        {/* Brand */}
-        <div>
-          <p className="font-display text-xl mb-3">The Sofa Hub</p>
-          <p className="text-linen/60 leading-relaxed">
-            Quality sofas delivered across the UK. Free delivery and cash on delivery on every order.
-          </p>
-        </div>
-
-        {/* Categories */}
-        <div>
-          <p className="font-semibold text-linen/80 mb-3 uppercase tracking-wider text-xs">Sofas</p>
-          <ul className="space-y-2 text-linen/60">
-            <li><Link href="/category/corner-sofas" className="hover:text-linen transition-colors">Corner Sofas</Link></li>
-            <li><Link href="/category/l-shape-sofas" className="hover:text-linen transition-colors">L-Shape Sofas</Link></li>
-            <li><Link href="/category/3-seater" className="hover:text-linen transition-colors">3 Seater Sofas</Link></li>
-            <li><Link href="/category/2-seater" className="hover:text-linen transition-colors">2 Seater Sofas</Link></li>
-            <li><Link href="/category/recliner-sofas" className="hover:text-linen transition-colors">Recliner Sofas</Link></li>
-            <li><Link href="/category/leather-sofas" className="hover:text-linen transition-colors">Leather Sofas</Link></li>
-          </ul>
-        </div>
-
-        {/* Info */}
-        <div>
-          <p className="font-semibold text-linen/80 mb-3 uppercase tracking-wider text-xs">Info</p>
-          <ul className="space-y-2 text-linen/60">
-            <li><Link href="/about" className="hover:text-linen transition-colors">About Us</Link></li>
-            <li><Link href="/contact" className="hover:text-linen transition-colors">Contact</Link></li>
-            <li>
-              <a
-                href="https://wa.me/447784123321"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-linen transition-colors"
-              >
-                WhatsApp: +44 7784 123321
-              </a>
-            </li>
-          </ul>
+    <footer className="mt-24 bg-charcoal font-body text-linen">
+      {/* Trust strip */}
+      <div className="border-b border-linen/10">
+        <div className="container-site grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
+          {trustPoints.map((t) => (
+            <div key={t.title} className="flex items-center gap-3">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-linen/5 text-gold">
+                <Icon name={t.icon} className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold">{t.title}</p>
+                <p className="text-xs text-linen/50">{t.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-6 py-4 border-t border-linen/10 text-linen/40 text-xs">
-        <p>© {new Date().getFullYear()} The Sofa Hub All rights reserved. Cash on delivery available across the UK.</p>
+      <div className="container-site grid gap-10 py-14 md:grid-cols-12">
+        <div className="md:col-span-4">
+          <Logo light />
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-linen/60">
+            Quality sofas at honest prices, delivered free across the UK. Order on WhatsApp and pay cash when it arrives.
+          </p>
+          <a
+            href={whatsappLink()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-linen/5 px-4 py-3 transition-colors hover:bg-linen/10"
+          >
+            <WhatsAppIcon className="h-6 w-6 text-whatsapp" />
+            <span>
+              <span className="block text-xs text-linen/50">Order or ask a question</span>
+              <span className="block text-sm font-semibold">{WHATSAPP_DISPLAY}</span>
+            </span>
+          </a>
+        </div>
+
+        <FooterColumn title="Shop by design" className="md:col-span-3">
+          {designCategories.map((d) => (
+            <FooterLink key={d.slug} href={`/shop/${d.slug}`}>{d.label}</FooterLink>
+          ))}
+          <FooterLink href="/shop/all">All Sofas</FooterLink>
+        </FooterColumn>
+
+        <FooterColumn title="Shop by size" className="md:col-span-2">
+          {sizeCategories.map((s) => (
+            <FooterLink key={s.slug} href={`/shop/size/${s.slug}`}>{s.label} Sofas</FooterLink>
+          ))}
+        </FooterColumn>
+
+        <FooterColumn title="Help" className="md:col-span-3">
+          <FooterLink href="/about">About Us</FooterLink>
+          <FooterLink href="/contact">Contact Us</FooterLink>
+          <li className="pt-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-linen/40">Colours</p>
+            <div className="flex gap-2">
+              {colourCategories.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/shop/colour/${c.slug}`}
+                  title={`${c.label} sofas`}
+                  className="h-7 w-7 rounded-full ring-1 ring-linen/20 transition-transform hover:scale-110"
+                  style={{ backgroundColor: c.hex }}
+                />
+              ))}
+            </div>
+          </li>
+        </FooterColumn>
+      </div>
+
+      <div className="border-t border-linen/10">
+        <div className="container-site flex flex-col gap-2 py-5 text-xs text-linen/40 md:flex-row md:items-center md:justify-between">
+          <p>© {new Date().getFullYear()} The Sofa Hub. All rights reserved.</p>
+          <p>Free UK delivery · Cash on delivery · No deposit needed</p>
+        </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, className = "", children }: { title: string; className?: string; children: React.ReactNode }) {
+  return (
+    <div className={className}>
+      <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-linen/40">{title}</p>
+      <ul className="space-y-2.5 text-sm">{children}</ul>
+    </div>
+  );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <Link href={href} className="text-linen/70 transition-colors hover:text-linen">
+        {children}
+      </Link>
+    </li>
   );
 }

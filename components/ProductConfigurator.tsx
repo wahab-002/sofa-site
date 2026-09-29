@@ -1,30 +1,27 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import type { ProductVariant, ProductColour, ProductFabric, ProductExtra } from "@/lib/types";
+import { useMemo, useState } from "react";
+import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import WhatsAppButton from "./WhatsAppButton";
+import ProductGallery, { fabricTexture } from "./product/ProductGallery";
+import Icon, { WhatsAppIcon } from "./Icon";
+import { variantIllustration } from "@/lib/illustration";
+import { fabricInfo, formatPrice, whatsappLink } from "@/lib/site";
 
 type Props = {
-  productName: string;
-  variants: ProductVariant[];
-  colours: ProductColour[];
-  fabrics: ProductFabric[];
-  extras: ProductExtra[];
-  basePrice: number;
+  product: ProductWithDetails;
+  badge: string;
+  fromPrice: number;
+  children?: React.ReactNode;
 };
 
-export default function ProductConfigurator({
-  productName,
-  variants,
-  colours,
-  fabrics,
-  extras,
-  basePrice,
-}: Props) {
+export default function ProductConfigurator({ product, badge, fromPrice, children }: Props) {
+  const { name: productName, variants, colours, fabrics, extras, base_price: basePrice } = product;
+
   const defaultVariant = variants.find((v) => v.label === "3+2 Set") ?? variants[0] ?? null;
-  const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(defaultVariant);
-  const [selectedColour, setSelectedColour] = useState<ProductColour | null>(colours[0] ?? null);
-  const [selectedFabric, setSelectedFabric] = useState<ProductFabric | null>(fabrics[0] ?? null);
+  const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
+  const [selectedColour, setSelectedColour] = useState(colours[0] ?? null);
+  const [selectedFabric, setSelectedFabric] = useState(fabrics[0] ?? null);
   const [selectedExtras, setSelectedExtras] = useState<ProductExtra[]>([]);
 
   const totalPrice = useMemo(() => {
@@ -35,9 +32,7 @@ export default function ProductConfigurator({
 
   const toggleExtra = (extra: ProductExtra) => {
     setSelectedExtras((prev) =>
-      prev.find((e) => e.id === extra.id)
-        ? prev.filter((e) => e.id !== extra.id)
-        : [...prev, extra]
+      prev.find((e) => e.id === extra.id) ? prev.filter((e) => e.id !== extra.id) : [...prev, extra],
     );
   };
 
@@ -57,153 +52,245 @@ export default function ProductConfigurator({
       .join("\n");
   }, [productName, selectedVariant, selectedColour, selectedFabric, selectedExtras, totalPrice]);
 
+  const spec = variantIllustration(product, selectedVariant);
+  let step = 0;
+
   return (
-    <div className="space-y-7">
-
-      {/* Variant / Size selector */}
-      {variants.length > 0 && (
-        <div>
-          <p className="font-body text-xs uppercase tracking-widest text-charcoal/50 mb-3">
-            Choose Size
-          </p>
-          <div className="grid grid-cols-2 gap-2">
-            {variants.map((v) => (
-              <button
-                key={v.id}
-                onClick={() => setSelectedVariant(v)}
-                disabled={!v.in_stock}
-                className={`p-3 rounded-xl border text-left transition-all font-body text-sm ${
-                  selectedVariant?.id === v.id
-                    ? "border-forest bg-forest/5 text-forest"
-                    : "border-charcoal/15 hover:border-charcoal/40 text-charcoal"
-                } ${!v.in_stock ? "opacity-40 cursor-not-allowed line-through" : "cursor-pointer"}`}
-              >
-                <p className="font-medium leading-snug">{v.label}</p>
-                <p className="text-xs mt-0.5 opacity-60">£{v.price_gbp.toLocaleString()}</p>
-              </button>
-            ))}
-          </div>
+    <>
+      <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-14">
+        {/* Gallery */}
+        <div className="lg:sticky lg:top-28 lg:self-start">
+          <ProductGallery
+            productName={productName}
+            images={product.images}
+            colour={selectedColour}
+            fabric={selectedFabric?.name ?? null}
+            spec={spec}
+            sizeLabel={selectedVariant?.label ?? null}
+          />
         </div>
-      )}
 
-      {/* Colour selector */}
-      {colours.length > 0 && (
+        {/* Details */}
         <div>
-          <p className="font-body text-xs uppercase tracking-widest text-charcoal/50 mb-3">
-            Colour —{" "}
-            <span className="text-charcoal normal-case tracking-normal font-medium">
-              {selectedColour?.name}
+          <p className="eyebrow">{badge}</p>
+          <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-charcoal md:text-5xl">{productName}</h1>
+          <p className="mt-2 font-body text-lg text-charcoal/60">{product.tagline}</p>
+
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span className="font-body text-sm text-charcoal/55">
+              From <span className="font-display text-2xl font-semibold text-charcoal">{formatPrice(fromPrice)}</span>
             </span>
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {colours.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setSelectedColour(c)}
-                title={c.name}
-                className={`w-9 h-9 rounded-full border-2 transition-all duration-200 ${
-                  selectedColour?.id === c.id
-                    ? "border-forest scale-110 shadow-lg"
-                    : "border-white hover:border-charcoal/30 shadow-sm"
-                }`}
-                style={{ backgroundColor: c.hex_code }}
-              />
-            ))}
+            <span className="rounded-full bg-forest/10 px-3 py-1 font-body text-xs font-semibold text-forest">Free UK delivery</span>
+            <span className="rounded-full bg-gold/20 px-3 py-1 font-body text-xs font-semibold text-clay">£0 deposit</span>
           </div>
-        </div>
-      )}
 
-      {/* Fabric selector */}
-      {fabrics.length > 0 && (
-        <div>
-          <p className="font-body text-xs uppercase tracking-widest text-charcoal/50 mb-3">
-            Fabric —{" "}
-            <span className="text-charcoal normal-case tracking-normal font-medium">
-              {selectedFabric?.name}
-            </span>
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {fabrics.map((f) => (
-              <button
-                key={f.id}
-                onClick={() => setSelectedFabric(f)}
-                className={`px-4 py-2 rounded-full border font-body text-sm transition-all ${
-                  selectedFabric?.id === f.id
-                    ? "border-forest bg-forest text-linen"
-                    : "border-charcoal/20 text-charcoal hover:border-charcoal/50"
-                }`}
-              >
-                {f.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+          <div className="mt-8 space-y-8">
+            {variants.length > 0 && (
+              <Section step={++step} title="Choose your size" value={selectedVariant?.label}>
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                  {variants.map((v) => {
+                    const active = selectedVariant?.id === v.id;
+                    return (
+                      <button
+                        key={v.id}
+                        onClick={() => setSelectedVariant(v)}
+                        disabled={!v.in_stock}
+                        className={`relative rounded-2xl border p-3.5 text-left transition-all ${
+                          active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
+                        } ${!v.in_stock ? "cursor-not-allowed opacity-40" : ""}`}
+                      >
+                        {v.label === "3+2 Set" && (
+                          <span className="absolute -top-2.5 right-3 rounded-full bg-clay px-2 py-0.5 font-body text-[10px] font-semibold uppercase tracking-wider text-linen">
+                            Popular
+                          </span>
+                        )}
+                        <span className="block font-body text-sm font-semibold text-charcoal">{v.label}</span>
+                        <span className="mt-0.5 block font-body text-sm text-charcoal/60">{formatPrice(v.price_gbp)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
+            )}
 
-      {/* Extras */}
-      {extras.length > 0 && (
-        <div>
-          <p className="font-body text-xs uppercase tracking-widest text-charcoal/50 mb-3">
-            Add Extras{" "}
-            <span className="normal-case tracking-normal text-charcoal/40">(optional)</span>
-          </p>
-          <div className="space-y-2">
-            {extras.map((e) => {
-              const isSelected = !!selectedExtras.find((s) => s.id === e.id);
-              return (
-                <label
-                  key={e.id}
-                  className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${
-                    isSelected
-                      ? "border-forest bg-forest/5"
-                      : "border-charcoal/12 hover:border-charcoal/25"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleExtra(e)}
-                      className="w-4 h-4 accent-forest cursor-pointer"
-                    />
-                    <span className="font-body text-sm text-charcoal">{e.name}</span>
-                  </div>
-                  <span className="font-body text-sm font-semibold text-charcoal">
-                    +£{e.price_gbp.toLocaleString()}
-                  </span>
-                </label>
-              );
-            })}
-          </div>
-        </div>
-      )}
+            {fabrics.length > 0 && (
+              <Section step={++step} title="Choose your fabric" value={selectedFabric?.name}>
+                <div className="grid gap-2 sm:grid-cols-3">
+                  {fabrics.map((f) => {
+                    const active = selectedFabric?.id === f.id;
+                    return (
+                      <button
+                        key={f.id}
+                        onClick={() => setSelectedFabric(f)}
+                        className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-all ${
+                          active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
+                        }`}
+                      >
+                        <span className="h-9 w-9 flex-shrink-0 rounded-lg ring-1 ring-charcoal/10" style={fabricTexture(f.name, selectedColour?.hex_code ?? "#B0ADA8")} />
+                        <span>
+                          <span className="block font-body text-sm font-semibold text-charcoal">{f.name}</span>
+                          {fabricInfo[f.name] && <span className="block font-body text-xs text-charcoal/50">{fabricInfo[f.name]}</span>}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
+            )}
 
-      {/* Total + CTA */}
-      <div className="border-t border-charcoal/10 pt-6 space-y-4">
-        <div className="flex items-end justify-between">
-          <div>
-            <p className="font-body text-xs text-charcoal/50 uppercase tracking-widest mb-1">Total</p>
-            <p className="font-display text-4xl text-charcoal leading-none">
-              £{totalPrice.toLocaleString()}
-            </p>
-            {selectedExtras.length > 0 && (
-              <p className="font-body text-xs text-charcoal/50 mt-1">
-                incl. {selectedExtras.map((e) => e.name).join(" + ")}
-              </p>
+            {colours.length > 0 && (
+              <Section step={++step} title="Choose your colour" value={selectedColour?.name}>
+                <div className="flex flex-wrap gap-2">
+                  {colours.map((c) => {
+                    const active = selectedColour?.id === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedColour(c)}
+                        title={c.name}
+                        aria-label={c.name}
+                        className={`group relative h-10 w-10 rounded-full transition-transform ${
+                          active ? "ring-2 ring-charcoal ring-offset-2 ring-offset-linen" : "hover:scale-110"
+                        }`}
+                      >
+                        <span className="absolute inset-0 rounded-full ring-1 ring-inset ring-charcoal/15" style={{ backgroundColor: c.hex_code }} />
+                        {active && (
+                          <Icon
+                            name="check"
+                            strokeWidth={2.6}
+                            className={`absolute inset-0 m-auto h-5 w-5 ${isLight(c.hex_code) ? "text-charcoal" : "text-white"}`}
+                          />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
+            )}
+
+            {extras.length > 0 && (
+              <Section step={++step} title="Complete the look" value="Optional">
+                <div className="space-y-2">
+                  {extras.map((e) => {
+                    const isSelected = !!selectedExtras.find((s) => s.id === e.id);
+                    return (
+                      <button
+                        key={e.id}
+                        onClick={() => toggleExtra(e)}
+                        aria-pressed={isSelected}
+                        className={`flex w-full items-center justify-between gap-3 rounded-2xl border p-3.5 text-left transition-all ${
+                          isSelected ? "border-forest bg-forest/5 ring-1 ring-forest" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
+                        }`}
+                      >
+                        <span className="flex items-center gap-3">
+                          <span
+                            className={`flex h-6 w-6 items-center justify-center rounded-md border transition-colors ${
+                              isSelected ? "border-forest bg-forest text-linen" : "border-charcoal/25 bg-white"
+                            }`}
+                          >
+                            {isSelected && <Icon name="check" className="h-4 w-4" strokeWidth={2.6} />}
+                          </span>
+                          <span className="font-body text-sm font-medium text-charcoal">{e.name}</span>
+                        </span>
+                        <span className="font-body text-sm font-semibold text-charcoal">+{formatPrice(e.price_gbp)}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </Section>
             )}
           </div>
-        </div>
 
-        <WhatsAppButton message={whatsappMessage} />
+          {/* Summary */}
+          <div id="order" className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-charcoal/10 md:p-6">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="font-body text-xs font-semibold uppercase tracking-[0.14em] text-charcoal/45">Your total</p>
+                <p className="mt-1 font-display text-4xl font-semibold leading-none text-charcoal">{formatPrice(totalPrice)}</p>
+              </div>
+              <p className="text-right font-body text-sm text-charcoal/55">
+                Pay today <span className="block font-semibold text-forest">£0</span>
+              </p>
+            </div>
+            <ul className="mt-4 space-y-1 border-t border-charcoal/10 pt-4 font-body text-sm text-charcoal/65">
+              <li className="flex justify-between">
+                <span>
+                  {selectedVariant?.label ?? productName}
+                  {selectedColour && ` · ${selectedColour.name}`}
+                  {selectedFabric && ` · ${selectedFabric.name}`}
+                </span>
+                <span>{formatPrice(selectedVariant?.price_gbp ?? basePrice)}</span>
+              </li>
+              {selectedExtras.map((e) => (
+                <li key={e.id} className="flex justify-between">
+                  <span>{e.name}</span>
+                  <span>+{formatPrice(e.price_gbp)}</span>
+                </li>
+              ))}
+              <li className="flex justify-between">
+                <span>Delivery</span>
+                <span className="font-medium text-forest">Free</span>
+              </li>
+            </ul>
 
-        <div className="grid grid-cols-3 gap-1 text-center">
-          {["Free UK delivery", "Cash on delivery", "No deposit needed"].map((t) => (
-            <p key={t} className="font-body text-xs text-charcoal/50">
-              ✓ {t}
-            </p>
-          ))}
+            <WhatsAppButton message={whatsappMessage} className="mt-5" />
+
+            <div className="mt-4 grid grid-cols-3 gap-2 text-center font-body text-xs text-charcoal/60">
+              {[
+                { icon: "truck", label: "Free UK delivery" },
+                { icon: "cash", label: "Cash on delivery" },
+                { icon: "shield", label: "No deposit" },
+              ].map((t) => (
+                <span key={t.label} className="flex flex-col items-center gap-1.5 rounded-xl bg-sand/70 px-2 py-2.5">
+                  <Icon name={t.icon} className="h-5 w-5 text-forest" />
+                  {t.label}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {children}
         </div>
       </div>
+
+      {/* Mobile sticky order bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-charcoal/10 bg-linen/95 px-4 py-3 backdrop-blur lg:hidden">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate font-body text-xs text-charcoal/55">
+              {selectedVariant?.label} · {selectedColour?.name}
+            </p>
+            <p className="font-display text-xl font-semibold text-charcoal">{formatPrice(totalPrice)}</p>
+          </div>
+          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
+            <WhatsAppIcon className="h-4 w-4" />
+            Order now
+          </a>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function Section({ step, title, value, children }: { step: number; title: string; value?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="mb-3 flex items-baseline justify-between gap-4">
+        <p className="flex items-center gap-2.5 font-display text-lg font-semibold text-charcoal">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-charcoal font-body text-xs font-semibold text-linen">{step}</span>
+          {title}
+        </p>
+        {value && <span className="font-body text-sm text-charcoal/55">{value}</span>}
+      </div>
+      {children}
     </div>
   );
+}
+
+function isLight(hex: string) {
+  const n = parseInt(hex.replace("#", ""), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return 0.299 * r + 0.587 * g + 0.114 * b > 170;
 }

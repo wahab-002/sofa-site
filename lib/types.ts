@@ -65,6 +65,13 @@ export type ProductWithDetails = Product & {
   extras: ProductExtra[];
 };
 
+export type ProductSummary = Product & {
+  colours: { name: string; hex_code: string }[];
+  from_price: number;
+  set_price: number | null;
+  image: { url: string; alt: string | null } | null;
+};
+
 export type Category = {
   id: string;
   slug: string;

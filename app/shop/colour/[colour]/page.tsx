@@ -1,5 +1,6 @@
 import { getProductsByColour } from "@/lib/products";
-import ProductCard from "@/components/ProductCard";
+import CollectionPage from "@/components/CollectionPage";
+import { colourCategories } from "@/lib/site";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -26,24 +27,18 @@ export default async function ShopColourPage({ params }: Props) {
   if (!meta) return notFound();
 
   const products = await getProductsByColour(params.colour);
+  const category = colourCategories.find((c) => c.slug === params.colour);
+  const label = `${category?.label ?? ""} Sofas`.trim();
 
   return (
-    <div>
-      <div className="flex items-center gap-4 mb-10">
-        <span className="w-10 h-10 rounded-full border border-charcoal/15 shadow-sm flex-shrink-0"
-          style={{ backgroundColor: meta.hex }} />
-        <div>
-          <h1 className="font-display text-4xl text-charcoal">{meta.title}</h1>
-          <p className="font-body text-charcoal/60 mt-1">{products.length} sofas available</p>
-        </div>
-      </div>
-      {products.length === 0 ? (
-        <p className="font-body text-charcoal/50">No sofas in this colour yet — check back soon.</p>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((p) => <ProductCard key={p.id} product={p} />)}
-        </div>
-      )}
-    </div>
+    <CollectionPage
+      title={label}
+      description={meta.description}
+      products={products}
+      crumb={label}
+      activeHref={`/shop/colour/${params.colour}`}
+      swatch={category?.hexes ?? [meta.hex]}
+      illustration={{ spec: { design: "corner", arms: "round" }, colour: meta.hex }}
+    />
   );
 }

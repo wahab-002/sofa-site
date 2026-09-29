@@ -1,8 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -12,18 +14,25 @@ const outfit = Outfit({
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Sofas UK | Quality Sofas, Delivered | The Sofa Hub",
   description:
     "Shop quality corner, 3-seater and 3+2 sofa sets with UK delivery and cash on delivery available.",
+  openGraph: { siteName: SITE_NAME, locale: "en_GB", type: "website" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#FAF7F2",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable}`}>
+    <html lang="en-GB" className={`${outfit.variable} ${inter.variable}`}>
       <body className="font-body">
         <Header />
-        <main className="max-w-5xl mx-auto px-6 py-10 min-h-screen">{children}</main>
+        <main className="min-h-[60vh]">{children}</main>
         <Footer />
+        <FloatingWhatsApp />
       </body>
     </html>
   );

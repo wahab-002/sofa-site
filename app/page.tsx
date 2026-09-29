@@ -1,9 +1,15 @@
 export const dynamic = "force-dynamic";
 
-import { getAllProducts } from "@/lib/products";
-import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { getAllProducts } from "@/lib/products";
+import ProductCard from "@/components/ProductCard";
+import SofaIllustration from "@/components/SofaIllustration";
+import HeroShowcase from "@/components/home/HeroShowcase";
+import HowToOrder from "@/components/HowToOrder";
+import Faq from "@/components/Faq";
+import Icon, { WhatsAppIcon } from "@/components/Icon";
+import { colourCategories, designCategories, formatPrice, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "The Sofa Hub | Quality UK Sofas at Unbeatable Prices — Free Delivery",
@@ -11,211 +17,289 @@ export const metadata: Metadata = {
     "Shop 12 sofa collections at The Sofa Hub. Corner sofas, 3+2 sets, chesterfields and more. Unbeatable UK prices, free delivery, cash on delivery. Order on WhatsApp today.",
 };
 
-const designCategories = [
-  { slug: "corner-sofas",       label: "Corner Sofas",       desc: "L-shape & corner designs" },
-  { slug: "chesterfield-sofas", label: "Chesterfield Sofas", desc: "Classic tufted style" },
-  { slug: "u-shape-sofas",      label: "U-Shape Sofas",      desc: "Maximum family seating" },
-  { slug: "3-2-sofa-sets",      label: "3+2 Sofa Sets",      desc: "Matching sets, great value" },
-  { slug: "3-2-1-full-sets",    label: "3+2+1 Full Sets",    desc: "Complete room package" },
-  { slug: "modular-sofas",      label: "Modular Sofas",      desc: "Build your perfect sofa" },
-];
-
-const sizeCategories = [
-  { slug: "2-seater", label: "2 Seater", seats: "2" },
-  { slug: "3-seater", label: "3 Seater", seats: "3" },
-  { slug: "4-seater", label: "4 Seater", seats: "4" },
-  { slug: "5-seater", label: "5 Seater", seats: "5" },
-  { slug: "6-seater", label: "6 Seater", seats: "6" },
-];
-
-const colourCategories = [
-  { slug: "grey-sofas",   label: "Grey",   hex: "#B0ADA8" },
-  { slug: "cream-sofas",  label: "Cream",  hex: "#F5F0E8" },
-  { slug: "navy-sofas",   label: "Navy",   hex: "#1E3A5F" },
-  { slug: "black-sofas",  label: "Black",  hex: "#1A1A1A" },
-  { slug: "brown-sofas",  label: "Brown",  hex: "#6B3A2A" },
-];
-
-const trustPoints = [
-  { icon: "🚚", title: "Free UK Delivery",      desc: "On every single order" },
-  { icon: "💷", title: "Cash on Delivery",       desc: "Pay when it arrives" },
-  { icon: "💬", title: "Order on WhatsApp",      desc: "Speak to a real person" },
-  { icon: "🏷️", title: "Unbeatable Prices",     desc: "We don't do overpricing" },
-];
-
-const usps = [
+const reasons = [
   {
-    icon: "📦",
-    title: "12 Sofa Collections",
-    desc: "Corner sofas, chesterfields, modular, U-shapes and more — all under one roof at prices that make sense.",
+    icon: "tag",
+    title: "Low prices. Always.",
+    desc: "We sell on volume, not margin. You get a quality sofa without paying for a showroom.",
   },
   {
-    icon: "💰",
-    title: "Low Prices. Always.",
-    desc: "We sell on volume, not margin. That means you get a quality sofa without paying showroom prices.",
+    icon: "home",
+    title: "Built for real homes",
+    desc: "Solid hardwood frames and deep foam cushions, in fabrics that cope with kids, pets and film nights.",
   },
   {
-    icon: "📱",
-    title: "Order in Minutes",
-    desc: "No complicated checkout. Pick your sofa, message us on WhatsApp, and we'll sort the rest — cash on delivery.",
+    icon: "shield",
+    title: "Zero risk ordering",
+    desc: "No deposit and nothing to pay online. You only pay when your sofa is at your door.",
+  },
+  {
+    icon: "chat",
+    title: "Real people, real answers",
+    desc: "No bots or call queues. Message us on WhatsApp and talk to the team directly.",
   },
 ];
 
 export default async function HomePage() {
   const products = await getAllProducts();
+  const fromPrice = products.length ? Math.min(...products.map((p) => p.from_price)) : 350;
+  const bestSellers = products.slice(0, 8);
 
   return (
-    <div>
-      {/* ── Hero ── */}
-      <section className="py-14 md:py-20 border-b border-charcoal/8">
-        <div className="inline-block bg-forest/10 text-forest font-body text-xs uppercase tracking-widest px-3 py-1 rounded-full mb-5">
-          Free UK Delivery on Everything
+    <>
+      {/* Hero */}
+      <section className="container-site grid items-center gap-10 pb-12 pt-8 md:pt-14 lg:grid-cols-[1fr_1.15fr] lg:gap-14">
+        <div className="animate-fade-up">
+          <p className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 font-body text-xs font-medium text-charcoal/70 ring-1 ring-charcoal/10">
+            <span className="h-2 w-2 rounded-full bg-whatsapp" />
+            Free UK delivery on every order
+          </p>
+          <h1 className="mt-6 font-display text-5xl font-bold leading-[1.02] text-charcoal md:text-6xl xl:text-7xl">
+            Quality sofas.
+            <br />
+            <span className="text-forest">Honest</span> prices.
+          </h1>
+          <p className="mt-6 max-w-lg font-body text-lg leading-relaxed text-charcoal/65">
+            12 collections, 10 colours and 3 fabrics, from just{" "}
+            <span className="font-semibold text-charcoal">{formatPrice(fromPrice)}</span>. No deposit. Order on WhatsApp and pay cash on delivery.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/shop/all" className="btn btn-primary btn-lg">
+              Shop all sofas
+              <Icon name="arrow" className="h-5 w-5" />
+            </Link>
+            <a href={whatsappLink("Hi, I'm looking for a sofa. Can you help?")} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg">
+              <WhatsAppIcon className="h-5 w-5 text-whatsapp" />
+              Ask us anything
+            </a>
+          </div>
+          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-body text-sm text-charcoal/65">
+            {["No deposit needed", "Cash on delivery", "Dispatched within 7 days"].map((t) => (
+              <li key={t} className="flex items-center gap-1.5">
+                <Icon name="check" className="h-4 w-4 text-forest" strokeWidth={2.2} />
+                {t}
+              </li>
+            ))}
+          </ul>
         </div>
-        <h1 className="font-display text-4xl md:text-6xl text-charcoal max-w-3xl leading-tight mb-5">
-          Quality sofas.<br />
-          <span className="text-forest">Unbeatable</span> UK prices.
-        </h1>
-        <p className="font-body text-charcoal/65 text-lg max-w-xl mb-8 leading-relaxed">
-          12 sofa collections. Hundreds of colour and fabric combinations. Cash on delivery, no deposit needed. Order straight from WhatsApp.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/shop/all"
-            className="inline-block bg-forest text-linen font-body px-7 py-3.5 rounded-xl hover:bg-charcoal transition-colors font-medium"
-          >
-            Shop All Sofas
-          </Link>
-          <Link
-            href="/shop/corner-sofas"
-            className="inline-block border border-charcoal/20 text-charcoal font-body px-7 py-3.5 rounded-xl hover:border-forest hover:text-forest transition-colors"
-          >
-            Corner Sofas →
-          </Link>
+        <div className="animate-fade-up [animation-delay:120ms]">
+          <HeroShowcase />
         </div>
       </section>
 
-      {/* ── Trust bar ── */}
-      <section className="py-6 border-b border-charcoal/8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Trust bar */}
+      <section className="border-y border-charcoal/10 bg-white">
+        <div className="container-site grid grid-cols-2 divide-charcoal/10 md:grid-cols-4 md:divide-x">
           {trustPoints.map((t) => (
-            <div key={t.title} className="flex items-center gap-3">
-              <span className="text-xl flex-shrink-0">{t.icon}</span>
+            <div key={t.title} className="flex items-center gap-3 py-5 md:justify-center md:px-4">
+              <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-sand text-forest">
+                <Icon name={t.icon} className="h-5 w-5" />
+              </span>
               <div>
-                <p className="font-body text-sm font-semibold text-charcoal leading-none">{t.title}</p>
-                <p className="font-body text-xs text-charcoal/50 mt-0.5">{t.desc}</p>
+                <p className="font-body text-sm font-semibold text-charcoal">{t.title}</p>
+                <p className="font-body text-xs text-charcoal/50">{t.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Shop by Design ── */}
-      <section className="py-12">
-        <div className="flex items-end justify-between mb-6">
-          <h2 className="font-display text-2xl text-charcoal">Shop by Design</h2>
-          <Link href="/shop/all" className="font-body text-sm text-forest hover:underline">
-            View all →
+      {/* Shop by design */}
+      <section className="container-site py-20">
+        <SectionHeading eyebrow="Find your style" title="Shop by design" href="/shop/all" linkLabel="View all sofas" />
+        <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3">
+          {designCategories.map((d) => (
+            <Link
+              key={d.slug}
+              href={`/shop/${d.slug}`}
+              className="group relative flex aspect-[4/3] flex-col justify-between overflow-hidden rounded-3xl bg-sand p-4 transition-colors hover:bg-stone md:p-6"
+            >
+              <div className="relative z-10 flex items-start justify-between">
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-charcoal md:text-2xl">{d.label}</h3>
+                  <p className="mt-0.5 hidden font-body text-sm text-charcoal/55 md:block">{d.desc}</p>
+                </div>
+                <span className="hidden h-10 w-10 items-center justify-center rounded-full bg-white text-charcoal transition-transform group-hover:translate-x-1 md:flex">
+                  <Icon name="arrow" className="h-4 w-4" />
+                </span>
+              </div>
+              <div className="flex h-[55%] items-end justify-center transition-transform duration-700 group-hover:scale-105">
+                <SofaIllustration spec={d.illustration} colour={d.colour} className="h-full w-full" title={d.label} />
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Best sellers */}
+      <section className="container-site pb-20">
+        <SectionHeading
+          eyebrow="Most loved"
+          title="Our best sellers"
+          subtitle="Hover the swatches to see each sofa in a different colour."
+          href="/shop/all"
+          linkLabel={`View all ${products.length}`}
+        />
+        <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
+          {bestSellers.map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} />
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/shop/all" className="btn btn-secondary btn-lg">
+            Browse all {products.length} sofas
+            <Icon name="arrow" className="h-5 w-5" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {designCategories.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/shop/${cat.slug}`}
-              className="group flex flex-col justify-between p-5 rounded-2xl border border-charcoal/10 hover:border-forest hover:bg-forest/5 transition-all duration-300 min-h-[100px]"
-            >
-              <p className="font-display text-lg text-charcoal group-hover:text-forest transition-colors">
-                {cat.label}
-              </p>
-              <p className="font-body text-sm text-charcoal/50 mt-2">{cat.desc}</p>
-            </Link>
-          ))}
-        </div>
       </section>
 
-      {/* ── Shop by Size ── */}
-      <section className="py-8 border-t border-charcoal/8">
-        <h2 className="font-display text-2xl text-charcoal mb-5">Shop by Size</h2>
-        <div className="flex flex-wrap gap-3">
-          {sizeCategories.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/shop/size/${s.slug}`}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl border border-charcoal/15 hover:border-forest hover:bg-forest/5 font-body text-sm text-charcoal hover:text-forest transition-all"
-            >
-              <span className="font-semibold">{s.seats}</span>
-              <span className="text-charcoal/60">Seater</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── All Products ── */}
-      <section className="py-12 border-t border-charcoal/8">
-        <div className="flex items-end justify-between mb-6">
-          <div>
-            <h2 className="font-display text-2xl text-charcoal">All Sofas</h2>
-            <p className="font-body text-sm text-charcoal/50 mt-1">
-              {products.length} collections — prices from £{Math.min(...products.map(p => p.base_price)).toLocaleString()}
+      {/* How to order */}
+      <section className="bg-forest py-20 text-linen">
+        <div className="container-site">
+          <div className="mb-12 grid gap-6 md:grid-cols-2 md:items-end">
+            <div>
+              <p className="font-body text-xs font-semibold uppercase tracking-[0.16em] text-gold">Simple as 1, 2, 3</p>
+              <h2 className="mt-3 font-display text-3xl font-semibold md:text-5xl">No checkout. No card. No stress.</h2>
+            </div>
+            <p className="font-body text-lg leading-relaxed text-linen/70 md:text-right">
+              Ordering a sofa should take minutes, not an afternoon. Here&apos;s how it works.
             </p>
           </div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
+          <HowToOrder />
         </div>
       </section>
 
-      {/* ── Shop by Colour ── */}
-      <section className="py-10 border-t border-charcoal/8">
-        <h2 className="font-display text-2xl text-charcoal mb-5">Shop by Colour</h2>
-        <div className="flex flex-wrap gap-3">
-          {colourCategories.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/shop/colour/${c.slug}`}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-charcoal/12 hover:border-charcoal/30 transition-all font-body text-sm text-charcoal"
-            >
-              <span
-                className="w-5 h-5 rounded-full border border-white shadow-sm flex-shrink-0"
-                style={{ backgroundColor: c.hex }}
-              />
-              {c.label} Sofas
-            </Link>
-          ))}
+      {/* Shop by size & colour */}
+      <section className="container-site grid gap-5 py-20 lg:grid-cols-2">
+        <div className="rounded-3xl bg-white p-6 ring-1 ring-charcoal/5 md:p-10">
+          <p className="eyebrow">Measure up</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-charcoal">Shop by size</h2>
+          <div className="mt-8 grid grid-cols-5 gap-2">
+            {sizeCategories.map((s) => (
+              <Link
+                key={s.slug}
+                href={`/shop/size/${s.slug}`}
+                className="group flex flex-col items-center rounded-2xl bg-sand px-1 py-5 text-center transition-colors hover:bg-forest hover:text-linen"
+              >
+                <span className="font-display text-4xl font-bold leading-none">{s.seats}</span>
+                <span className="mt-1 font-body text-xs text-charcoal/55 group-hover:text-linen/70">seater</span>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-5 font-body text-sm text-charcoal/55">
+            Not sure what fits? Send us your room measurements on WhatsApp and we&apos;ll suggest a size.
+          </p>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 ring-1 ring-charcoal/5 md:p-10">
+          <p className="eyebrow">10 colours available</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-charcoal">Shop by colour</h2>
+          <div className="mt-8 grid grid-cols-5 gap-2">
+            {colourCategories.map((c) => (
+              <Link key={c.slug} href={`/shop/colour/${c.slug}`} className="group flex flex-col items-center gap-3 text-center">
+                <span className="relative block aspect-square w-full max-w-[84px] overflow-hidden rounded-full ring-1 ring-charcoal/10 transition-transform duration-300 group-hover:scale-105">
+                  <span className="absolute inset-0 flex">
+                    {c.hexes.map((h) => (
+                      <span key={h} className="h-full flex-1" style={{ backgroundColor: h }} />
+                    ))}
+                  </span>
+                  <span className="absolute inset-0 bg-gradient-to-br from-white/25 to-transparent" />
+                </span>
+                <span className="font-body text-sm font-medium text-charcoal">{c.label}</span>
+              </Link>
+            ))}
+          </div>
+          <p className="mt-5 font-body text-sm text-charcoal/55">
+            Every sofa comes in Plush Velvet, Chenille or Leather, so you get the exact look you want.
+          </p>
         </div>
       </section>
 
-      {/* ── Why The Sofa Hub ── */}
-      <section className="py-12 border-t border-charcoal/8">
-        <h2 className="font-display text-2xl text-charcoal mb-8">Why The Sofa Hub?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {usps.map((u) => (
-            <div key={u.title} className="p-6 rounded-2xl bg-charcoal text-linen">
-              <span className="text-3xl block mb-4">{u.icon}</span>
-              <h3 className="font-display text-xl mb-2">{u.title}</h3>
-              <p className="font-body text-linen/65 text-sm leading-relaxed">{u.desc}</p>
+      {/* Why us */}
+      <section className="container-site pb-20">
+        <SectionHeading eyebrow="Why The Sofa Hub" title="Showroom quality, without the showroom price" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {reasons.map((r) => (
+            <div key={r.title} className="rounded-3xl bg-sand p-7">
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-forest shadow-soft">
+                <Icon name={r.icon} className="h-6 w-6" />
+              </span>
+              <h3 className="mt-6 font-display text-xl font-semibold text-charcoal">{r.title}</h3>
+              <p className="mt-2 font-body text-sm leading-relaxed text-charcoal/60">{r.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Bottom CTA ── */}
-      <section className="py-12 border-t border-charcoal/8 text-center">
-        <h2 className="font-display text-3xl text-charcoal mb-3">
-          Ready to find your sofa?
-        </h2>
-        <p className="font-body text-charcoal/60 mb-6 max-w-md mx-auto">
-          Browse our full collection and order in minutes. Cash on delivery, no deposit, free UK delivery.
-        </p>
-        <Link
-          href="/shop/all"
-          className="inline-block bg-forest text-linen font-body px-8 py-4 rounded-xl hover:bg-charcoal transition-colors font-medium text-lg"
-        >
-          Shop All Sofas
-        </Link>
+      {/* FAQ */}
+      <section className="container-site grid gap-10 pb-20 lg:grid-cols-[1fr_1.6fr]">
+        <div>
+          <p className="eyebrow">Good to know</p>
+          <h2 className="section-title mt-2">Questions, answered</h2>
+          <p className="mt-4 max-w-sm font-body text-charcoal/60">
+            Can&apos;t find what you&apos;re looking for? We&apos;re one message away.
+          </p>
+          <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-md mt-6">
+            <WhatsAppIcon className="h-4 w-4 text-whatsapp" />
+            Message us
+          </a>
+        </div>
+        <Faq />
       </section>
+
+      {/* CTA */}
+      <section className="container-site">
+        <div className="relative overflow-hidden rounded-[2rem] bg-charcoal px-6 py-14 text-center text-linen md:px-16 md:py-20">
+          <div className="pointer-events-none absolute -bottom-24 left-1/2 w-[1100px] max-w-none -translate-x-1/2 opacity-[0.045]">
+            <SofaIllustration spec={{ design: "u-shape", arms: "round" }} colour="#FAF7F2" className="w-full" />
+          </div>
+          <div className="relative">
+            <h2 className="mx-auto max-w-2xl font-display text-4xl font-semibold md:text-5xl">Your new sofa is a message away</h2>
+            <p className="mx-auto mt-4 max-w-lg font-body text-lg text-linen/65">
+              Free UK delivery, no deposit, and cash on delivery. Pick a sofa and we&apos;ll handle the rest.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Link href="/shop/all" className="btn btn-light btn-lg">
+                Shop all sofas
+              </Link>
+              <a href={whatsappLink("Hi, I'd like to order a sofa.")} target="_blank" rel="noopener noreferrer" className="btn btn-lg bg-whatsapp text-charcoal hover:brightness-95">
+                <WhatsAppIcon className="h-5 w-5" />
+                Chat on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  subtitle,
+  href,
+  linkLabel,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  href?: string;
+  linkLabel?: string;
+}) {
+  return (
+    <div className="mb-8 flex flex-wrap items-end justify-between gap-4 md:mb-10">
+      <div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="section-title mt-2">{title}</h2>
+        {subtitle && <p className="mt-2 font-body text-charcoal/55">{subtitle}</p>}
+      </div>
+      {href && linkLabel && (
+        <Link href={href} className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-forest hover:underline">
+          {linkLabel}
+          <Icon name="arrow" className="h-4 w-4" />
+        </Link>
+      )}
     </div>
   );
 }
