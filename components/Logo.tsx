@@ -12,8 +12,8 @@ type Props = {
 
 export default function Logo({ light = false, stacked = false, className, priority = false }: Props) {
   const colour = light ? "white" : "dark";
-  const src = stacked ? `/brand/logo-stacked-${colour}.png` : `/brand/logo-horizontal-${colour}.png`;
-  const [width, height] = stacked ? [370, 304] : [488, 100];
+  const src = stacked ? `/brand/logo-stacked-${colour}.svg` : `/brand/logo-horizontal-${colour}.svg`;
+  const [width, height] = stacked ? [370, 304] : [490, 100];
 
   return (
     <Link href="/" className="flex flex-shrink-0 items-center" aria-label="The Sofa Hub home">
@@ -23,6 +23,7 @@ export default function Logo({ light = false, stacked = false, className, priori
         width={width}
         height={height}
         priority={priority}
+        unoptimized
         className={className ?? (stacked ? "h-auto w-40" : "h-10 w-auto md:h-12")}
       />
     </Link>

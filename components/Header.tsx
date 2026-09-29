@@ -77,12 +77,12 @@ export default function Header() {
         <div className="container-site flex h-16 items-center justify-between gap-6 md:h-20">
           <Logo priority />
 
-          <nav className="hidden flex-1 items-center justify-center gap-1 font-body text-[15px] text-charcoal/80 lg:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-0 whitespace-nowrap font-body text-[15px] text-charcoal/80 lg:flex xl:gap-1">
             <div onMouseEnter={openMega} onMouseLeave={closeMega}>
               <button
                 onClick={() => setMegaOpen((v) => !v)}
                 aria-expanded={megaOpen}
-                className={`flex items-center gap-1 rounded-full px-4 py-2 transition-colors ${
+                className={`flex items-center gap-1 rounded-full px-3 py-2 transition-colors xl:px-4 ${
                   megaOpen ? "bg-charcoal/[0.06] text-charcoal" : "hover:text-charcoal"
                 }`}
               >
@@ -94,7 +94,7 @@ export default function Header() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`rounded-full px-4 py-2 transition-colors hover:text-charcoal ${
+                className={`rounded-full px-3 py-2 transition-colors hover:text-charcoal xl:px-4 ${
                   pathname === l.href ? "text-charcoal" : ""
                 }`}
               >
@@ -104,7 +104,7 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link href="/contact" className="hidden px-3 font-body text-sm text-charcoal/70 hover:text-charcoal md:block">
+            <Link href="/contact" className="hidden px-3 font-body text-sm text-charcoal/70 hover:text-charcoal md:block lg:hidden xl:block">
               Contact
             </Link>
             <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="btn btn-primary hidden px-5 py-2.5 text-sm sm:inline-flex">
