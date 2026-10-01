@@ -10,6 +10,7 @@ import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
 import { colourCategories, designCategories, formatPrice, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
+import { LOCAL_COLLECTION_COUNT } from "@/lib/localCatalog";
 
 export const metadata: Metadata = {
   title: "The Sofa Hub | Quality UK Sofas at Unbeatable Prices — Free Delivery",
@@ -60,7 +61,7 @@ export default async function HomePage() {
             <span className="text-forest">Honest</span> prices.
           </h1>
           <p className="mt-6 max-w-lg font-body text-lg leading-relaxed text-charcoal/65">
-            12 collections, 10 colours and 3 fabrics, from just{" "}
+            {LOCAL_COLLECTION_COUNT} collections, 10 colours and 3 fabrics, from just{" "}
             <span className="font-semibold text-charcoal">{formatPrice(fromPrice)}</span>. No deposit. Order on WhatsApp and pay cash on delivery.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

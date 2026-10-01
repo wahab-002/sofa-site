@@ -1,17 +1,60 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import SofaIllustration from "@/components/SofaIllustration";
 import Icon from "@/components/Icon";
+import { formatPrice } from "@/lib/site";
 
-const colours = [
-  { name: "Navy", hex: "#1E3A5F" },
-  { name: "Light Grey", hex: "#B0ADA8" },
-  { name: "Olive", hex: "#4A5240" },
-  { name: "Beige", hex: "#C9B99A" },
-  { name: "Orange", hex: "#D4774A" },
-  { name: "Dark Grey", hex: "#3D3D3D" },
+const featured = [
+  {
+    slug: "atalian-sofa",
+    name: "Atalian Chesterfield",
+    image: "/products/atalian/photo-01.webp",
+    colour: "Cream",
+    price: 1249,
+    label: "Corner",
+  },
+  {
+    slug: "falcon-sofa",
+    name: "Falcon Sofa",
+    image: "/products/falcon/photo-01.webp",
+    colour: "Dark Grey",
+    price: 1049,
+    label: "3+2 Set",
+  },
+  {
+    slug: "bishop-sofa",
+    name: "Bishop U-Shape",
+    image: "/products/bishop/photo-01.webp",
+    colour: "Olive",
+    price: 1299,
+    label: "U-Shape",
+  },
+  {
+    slug: "lily-sofa",
+    name: "Lily Sofa",
+    image: "/products/lily/photo-01.webp",
+    colour: "Dark Grey",
+    price: 949,
+    label: "3+2 Set",
+  },
+  {
+    slug: "olympia-sofa",
+    name: "Olympia Chesterfield",
+    image: "/products/olympia/photo-01.webp",
+    colour: "Cream",
+    price: 1299,
+    label: "Full Set",
+  },
+  {
+    slug: "malibu-sofa",
+    name: "Malibu Sofa",
+    image: "/products/malibu/room-32-caramel.webp",
+    colour: "Beige",
+    price: 879,
+    label: "3+2 Set",
+  },
 ];
 
 export default function HeroShowcase() {
@@ -20,41 +63,42 @@ export default function HeroShowcase() {
 
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setActive((i) => (i + 1) % colours.length), 2600);
+    const id = setInterval(() => setActive((i) => (i + 1) % featured.length), 3200);
     return () => clearInterval(id);
   }, [paused]);
 
-  const colour = colours[active];
+  const item = featured[active];
 
   return (
     <div
-      className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sand via-stone/60 to-sand p-6 md:p-10"
+      className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sand via-stone/60 to-sand"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Wall + floor */}
-      <div className="absolute inset-x-0 bottom-0 h-[28%] bg-gradient-to-b from-[#E4DBCD] to-[#DCD1C0]" />
-      <div className="absolute right-[16%] top-[12%] h-[30%] w-[18%] rounded-lg border-[6px] border-white/80 bg-gradient-to-br from-[#D9CBB6] to-[#BFAE93] shadow-soft" />
-      <div className="absolute right-[40%] top-[16%] h-[22%] w-[12%] rounded-lg border-[6px] border-white/80 bg-gradient-to-br from-[#C9B99A] to-[#8C5A3C]/60 shadow-soft" />
-      <div className="absolute left-[8%] top-[40%] h-28 w-28 rounded-full bg-gold/20 blur-3xl" />
-
-      <div className="relative flex min-h-[300px] items-end md:min-h-[380px]">
-        <SofaIllustration
-          spec={{ design: "corner", arms: "slim" }}
-          colour={colour.hex}
-          className="relative z-10 w-full drop-shadow-sm"
-          title={`Verona corner sofa in ${colour.name}`}
-        />
+      <div className="relative aspect-[4/5] min-h-[320px] md:aspect-[5/4] md:min-h-[380px]">
+        {featured.map((f, i) => (
+          <Image
+            key={f.slug}
+            src={f.image}
+            alt={`${f.name} in ${f.colour}`}
+            fill
+            priority={i === 0}
+            sizes="(max-width: 1024px) 100vw, 55vw"
+            className={`object-cover transition-opacity duration-700 ${i === active ? "opacity-100" : "opacity-0"}`}
+          />
+        ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal/35 via-transparent to-transparent" />
       </div>
 
       <Link
-        href="/products/verona-sofa"
+        href={`/products/${item.slug}`}
         className="group absolute left-5 top-5 z-20 rounded-2xl bg-white/95 p-4 shadow-soft backdrop-blur transition-transform hover:-translate-y-0.5 md:left-8 md:top-8"
       >
         <p className="font-body text-[11px] font-semibold uppercase tracking-[0.14em] text-clay">Best seller</p>
-        <p className="mt-0.5 font-display text-lg font-semibold text-charcoal">Verona Corner Sofa</p>
+        <p className="mt-0.5 font-display text-lg font-semibold text-charcoal">{item.name}</p>
         <p className="font-body text-sm text-charcoal/60">
-          In <span className="font-medium text-charcoal">{colour.name}</span> · <span className="font-semibold text-forest">£949</span>
+          {item.label} · <span className="font-medium text-charcoal">{item.colour}</span> ·{" "}
+          <span className="font-semibold text-forest">{formatPrice(item.price)}</span>
         </p>
         <span className="mt-2 inline-flex items-center gap-1 font-body text-xs font-medium text-forest">
           View sofa <Icon name="arrow" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -62,15 +106,14 @@ export default function HeroShowcase() {
       </Link>
 
       <div className="absolute bottom-5 right-5 z-20 flex items-center gap-1.5 rounded-full bg-white/95 p-1.5 shadow-soft backdrop-blur md:bottom-8 md:right-8">
-        {colours.map((c, i) => (
+        {featured.map((f, i) => (
           <button
-            key={c.name}
+            key={f.slug}
             onClick={() => setActive(i)}
-            aria-label={`Show in ${c.name}`}
-            className={`h-6 w-6 rounded-full ring-1 ring-charcoal/10 transition-transform ${
-              i === active ? "scale-110 ring-2 ring-charcoal ring-offset-2" : "hover:scale-110"
+            aria-label={`Show ${f.name}`}
+            className={`h-2.5 w-2.5 rounded-full transition-all ${
+              i === active ? "w-6 bg-forest" : "bg-charcoal/25 hover:bg-charcoal/45"
             }`}
-            style={{ backgroundColor: c.hex }}
           />
         ))}
       </div>

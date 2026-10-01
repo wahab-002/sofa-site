@@ -9,6 +9,10 @@ const armStyles: Record<string, ArmStyle> = {
   "ashton-sofa": "slim",
   "dino-sofa": "round",
   "harrison-sofa": "square",
+  "atalian-sofa": "slim",
+  "bishop-sofa": "round",
+  "borrius-sofa": "round",
+  "olympia-sofa": "slim",
 };
 
 const cardDesigns: Record<string, IllustrationSpec["design"]> = {
@@ -16,6 +20,10 @@ const cardDesigns: Record<string, IllustrationSpec["design"]> = {
   "malibu-sofa": "corner",
   "ashton-sofa": "corner",
   "falcon-sofa": "corner",
+  "atalian-sofa": "chesterfield",
+  "borrius-sofa": "corner",
+  "bishop-sofa": "u-shape",
+  "olympia-sofa": "chesterfield",
 };
 
 type ProductLike = { slug: string; design_type: string };

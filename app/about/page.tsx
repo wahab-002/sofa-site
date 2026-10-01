@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: "12", label: "Sofa collections" },
+  { value: "9", label: "Sofa collections" },
   { value: "10", label: "Colours to choose from" },
   { value: "£0", label: "Deposit, ever" },
   { value: "7 days", label: "Typical dispatch" },

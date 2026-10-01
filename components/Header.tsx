@@ -194,7 +194,7 @@ export default function Header() {
             </div>
             <div className="border-t border-charcoal/5 bg-sand/60">
               <div className="container-site flex items-center justify-between py-3 font-body text-sm">
-                <span className="text-charcoal/60">12 collections · 10 colours · 3 fabrics</span>
+                <span className="text-charcoal/60">9 collections · 10 colours · 3 fabrics</span>
                 <Link href="/shop/all" className="inline-flex items-center gap-1.5 font-medium text-forest hover:underline">
                   View all sofas <Icon name="arrow" className="h-4 w-4" />
                 </Link>

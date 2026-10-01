@@ -1,6 +1,20 @@
-import { supabase } from "./supabase";
+import { isSupabaseConfigured, supabase } from "./supabase";
 import type { Product, ProductSummary, ProductWithDetails } from "./types";
 import { getProductMedia, mediaColours, productMedia } from "./productMedia";
+import {
+  localAllProducts,
+  localAllSlugs,
+  localProductBySlug,
+  localProductsByColour,
+  localProductsByDesign,
+  localProductsBySize,
+  localRecommendations,
+} from "./localCatalog";
+
+function db() {
+  if (!isSupabaseConfigured || !supabase) return null;
+  return supabase;
+}
 
 function cardImage(slug: string, name: string) {
   const media = getProductMedia(slug);
@@ -43,30 +57,34 @@ function toSummaries(data: unknown): ProductSummary[] {
 }
 
 export async function getAllProducts(): Promise<ProductSummary[]> {
-  const { data, error } = await supabase
+  const client = db();
+  if (!client) return localAllProducts();
+  const { data, error } = await client
     .from("products")
     .select(SUMMARY_SELECT)
     .eq("in_stock", true)
     .order("featured", { ascending: false })
     .order("created_at", { ascending: false });
-  if (error) return [];
+  if (error || !data?.length) return localAllProducts();
   return toSummaries(data);
 }
 
 export async function getProductBySlug(slug: string): Promise<ProductWithDetails | null> {
-  const { data: product, error } = await supabase
+  const client = db();
+  if (!client) return localProductBySlug(slug);
+  const { data: product, error } = await client
     .from("products")
     .select("*")
     .eq("slug", slug)
     .single();
-  if (error || !product) return null;
+  if (error || !product) return localProductBySlug(slug);
 
   const [variants, colours, fabrics, images, extras] = await Promise.all([
-    supabase.from("product_variants").select("*").eq("product_id", product.id).eq("in_stock", true).order("sort_order"),
-    supabase.from("product_colours").select("*").eq("product_id", product.id).eq("in_stock", true),
-    supabase.from("product_fabrics").select("*").eq("product_id", product.id).eq("in_stock", true),
-    supabase.from("product_images").select("*").eq("product_id", product.id).order("sort_order"),
-    supabase.from("product_extras").select("*").eq("product_id", product.id).eq("in_stock", true),
+    client.from("product_variants").select("*").eq("product_id", product.id).eq("in_stock", true).order("sort_order"),
+    client.from("product_colours").select("*").eq("product_id", product.id).eq("in_stock", true),
+    client.from("product_fabrics").select("*").eq("product_id", product.id).eq("in_stock", true),
+    client.from("product_images").select("*").eq("product_id", product.id).order("sort_order"),
+    client.from("product_extras").select("*").eq("product_id", product.id).eq("in_stock", true),
   ]);
 
   return {
@@ -88,7 +106,9 @@ export async function getProductBySlug(slug: string): Promise<ProductWithDetails
 }
 
 export async function getProductsByDesign(design: string): Promise<ProductSummary[]> {
-  let query = supabase.from("products").select(SUMMARY_SELECT).eq("in_stock", true);
+  const client = db();
+  if (!client) return localProductsByDesign(design);
+  let query = client.from("products").select(SUMMARY_SELECT).eq("in_stock", true);
 
   if (design === "corner-sofas") query = query.eq("has_corner", true);
   else if (design === "chesterfield-sofas") query = query.eq("design_type", "chesterfield");
@@ -99,38 +119,42 @@ export async function getProductsByDesign(design: string): Promise<ProductSummar
   }
 
   const { data, error } = await query.order("featured", { ascending: false });
-  if (error) return [];
+  if (error || !data?.length) return localProductsByDesign(design);
   return toSummaries(data);
 }
 
 export async function getProductsBySize(size: string): Promise<ProductSummary[]> {
+  const client = db();
+  if (!client) return localProductsBySize(size);
   const seatMap: Record<string, number> = {
     "2-seater": 2, "3-seater": 3, "4-seater": 4, "5-seater": 5, "6-seater": 6,
   };
   const seats = seatMap[size];
   if (!seats) return [];
 
-  const { data: variants, error } = await supabase
+  const { data: variants, error } = await client
     .from("product_variants")
     .select("product_id")
     .eq("seats", seats)
     .eq("in_stock", true);
-  if (error || !variants) return [];
+  if (error || !variants?.length) return localProductsBySize(size);
 
   const ids = [...new Set(variants.map((v) => v.product_id))];
-  if (ids.length === 0) return [];
+  if (ids.length === 0) return localProductsBySize(size);
 
-  const { data, error: err2 } = await supabase
+  const { data, error: err2 } = await client
     .from("products")
     .select(SUMMARY_SELECT)
     .in("id", ids)
     .eq("in_stock", true)
     .order("featured", { ascending: false });
-  if (err2) return [];
+  if (err2 || !data?.length) return localProductsBySize(size);
   return toSummaries(data);
 }
 
 export async function getProductsByColour(colour: string): Promise<ProductSummary[]> {
+  const client = db();
+  if (!client) return localProductsByColour(colour);
   const colourMap: Record<string, string[]> = {
     "grey-sofas": ["Dark Grey", "Light Grey"],
     "cream-sofas": ["Cream", "Beige"],
@@ -141,46 +165,50 @@ export async function getProductsByColour(colour: string): Promise<ProductSummar
   const names = colourMap[colour] || [];
   if (names.length === 0) return [];
 
-  const { data: colours, error } = await supabase
+  const { data: colours, error } = await client
     .from("product_colours")
     .select("product_id")
     .in("name", names);
-  if (error || !colours) return [];
+  if (error || !colours) return localProductsByColour(colour);
 
   const overridden = Object.entries(productMedia).filter(([, m]) => m.colours);
   const matchingSlugs = overridden.filter(([, m]) => m.colours!.some((c) => names.includes(c.name))).map(([slug]) => slug);
   const excludedSlugs = new Set(overridden.map(([slug]) => slug).filter((slug) => !matchingSlugs.includes(slug)));
 
   const ids = [...new Set(colours.map((c) => c.product_id))];
-  if (ids.length === 0 && matchingSlugs.length === 0) return [];
+  if (ids.length === 0 && matchingSlugs.length === 0) return localProductsByColour(colour);
 
   const filters = [ids.length && `id.in.(${ids.join(",")})`, matchingSlugs.length && `slug.in.(${matchingSlugs.join(",")})`]
     .filter(Boolean)
     .join(",");
-  const { data, error: err2 } = await supabase
+  const { data, error: err2 } = await client
     .from("products")
     .select(SUMMARY_SELECT)
     .or(filters)
     .eq("in_stock", true)
     .order("featured", { ascending: false });
-  if (err2) return [];
+  if (err2 || !data?.length) return localProductsByColour(colour);
   return toSummaries(data).filter((p) => !excludedSlugs.has(p.slug));
 }
 
 export async function getRecommendations(currentSlug: string, limit = 4): Promise<ProductSummary[]> {
-  const { data, error } = await supabase
+  const client = db();
+  if (!client) return localRecommendations(currentSlug, limit);
+  const { data, error } = await client
     .from("products")
     .select(SUMMARY_SELECT)
     .eq("in_stock", true)
     .neq("slug", currentSlug)
     .order("featured", { ascending: false })
     .limit(limit);
-  if (error) return [];
+  if (error || !data?.length) return localRecommendations(currentSlug, limit);
   return toSummaries(data);
 }
 
 export async function getAllProductSlugs(): Promise<string[]> {
-  const { data, error } = await supabase.from("products").select("slug");
-  if (error || !data) return [];
+  const client = db();
+  if (!client) return localAllSlugs();
+  const { data, error } = await client.from("products").select("slug");
+  if (error || !data?.length) return localAllSlugs();
   return data.map((p) => p.slug);
 }

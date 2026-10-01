@@ -31,6 +31,20 @@ export type ProductMedia = {
 const verona = (file: string) => `/products/verona/${file}.webp`;
 const oakland = (file: string) => `/products/oakland/${file}.webp`;
 const malibu = (file: string) => `/products/malibu/${file}.webp`;
+const atalian = (file: string) => `/products/atalian/${file}.webp`;
+const bishop = (file: string) => `/products/bishop/${file}.webp`;
+const borrius = (file: string) => `/products/borrius/${file}.webp`;
+const falcon = (file: string) => `/products/falcon/${file}.webp`;
+const lily = (file: string) => `/products/lily/${file}.webp`;
+const olympia = (file: string) => `/products/olympia/${file}.webp`;
+
+function gallery(pathFn: (f: string) => string, files: string[], alt: (n: number) => string, colour?: string): MediaPhoto[] {
+  return files.map((file, i) => ({
+    src: pathFn(file),
+    alt: alt(i + 1),
+    colour,
+  }));
+}
 
 export const productMedia: Record<string, ProductMedia> = {
   "verona-sofa": {
@@ -115,6 +129,94 @@ export const productMedia: Record<string, ProductMedia> = {
 
       { src: malibu("showroom-corner-grey"), alt: "Malibu corner sofa in grey", sizes: ["Corner"], colour: "Dark Grey" },
     ],
+  },
+
+  "atalian-sofa": {
+    cardImage: atalian("photo-01"),
+    photos: gallery(
+      atalian,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05", "photo-06"],
+      (n) => `Atalian Chesterfield sofa — photo ${n}`,
+      "Cream",
+    ).map((p, i) =>
+      i === 0
+        ? { ...p, sizes: ["Corner", "3+2 Set"], alt: "Atalian Chesterfield corner sofa in cream with gold feet" }
+        : p,
+    ),
+  },
+
+  "bishop-sofa": {
+    cardImage: bishop("photo-01"),
+    photos: gallery(
+      bishop,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05", "photo-06"],
+      (n) => `Bishop U-Shape sofa — photo ${n}`,
+      "Olive",
+    ).map((p, i) =>
+      i === 0
+        ? { ...p, sizes: ["U-Shape"], alt: "Bishop U-Shape sofa in emerald green corduroy" }
+        : p,
+    ),
+  },
+
+  "borrius-sofa": {
+    cardImage: borrius("photo-01"),
+    photos: gallery(
+      borrius,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05"],
+      (n) => `Borrius sofa — photo ${n}`,
+      "Cream",
+    ).map((p, i) =>
+      i === 0
+        ? { ...p, sizes: ["Corner"], alt: "Borrius low-profile corner sofa in soft cream" }
+        : p,
+    ),
+  },
+
+  "falcon-sofa": {
+    cardImage: falcon("photo-01"),
+    photos: gallery(
+      falcon,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05", "photo-06"],
+      (n) => `Falcon sofa — photo ${n}`,
+      "Dark Grey",
+    ).map((p, i) =>
+      i === 0
+        ? { ...p, sizes: ["3+2 Set", "3 Seater"], alt: "Falcon tufted sofa set in grey velvet with matching ottoman" }
+        : p,
+    ),
+  },
+
+  "lily-sofa": {
+    cardImage: lily("photo-01"),
+    photos: gallery(
+      lily,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05"],
+      (n) => `Lily sofa — photo ${n}`,
+      "Dark Grey",
+    ).map((p, i) =>
+      i === 0
+        ? { ...p, sizes: ["3+2 Set", "3 Seater"], alt: "Lily channel-tufted 3+2 sofa set in charcoal grey" }
+        : p,
+    ),
+  },
+
+  "olympia-sofa": {
+    cardImage: olympia("photo-01"),
+    photos: gallery(
+      olympia,
+      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05"],
+      (n) => `Olympia Chesterfield — photo ${n}`,
+      "Cream",
+    ).map((p, i) =>
+      i === 0
+        ? {
+            ...p,
+            sizes: ["3+2+1 Full Set", "3+2 Set", "3 Seater"],
+            alt: "Olympia Chesterfield 3+2+1 set in cream with jewel-tone cushions",
+          }
+        : p,
+    ),
   },
 };
 
