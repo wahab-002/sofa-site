@@ -1,3 +1,5 @@
+import { ATALIAN_COLOURS, ATALIAN_CONFIGS, atalianPhoto } from "./atalian";
+
 export type BackStyle = {
   id: string;
   name: string;
@@ -31,7 +33,6 @@ export type ProductMedia = {
 const verona = (file: string) => `/products/verona/${file}.webp`;
 const oakland = (file: string) => `/products/oakland/${file}.webp`;
 const malibu = (file: string) => `/products/malibu/${file}.webp`;
-const atalian = (file: string) => `/products/atalian/${file}.webp`;
 const bishop = (file: string) => `/products/bishop/${file}.webp`;
 const borrius = (file: string) => `/products/borrius/${file}.webp`;
 const falcon = (file: string) => `/products/falcon/${file}.webp`;
@@ -132,16 +133,14 @@ export const productMedia: Record<string, ProductMedia> = {
   },
 
   "atalian-sofa": {
-    cardImage: atalian("photo-01"),
-    photos: gallery(
-      atalian,
-      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05", "photo-06"],
-      (n) => `Atalian Chesterfield sofa — photo ${n}`,
-      "Cream",
-    ).map((p, i) =>
-      i === 0
-        ? { ...p, sizes: ["Corner", "3+2 Set"], alt: "Atalian Chesterfield corner sofa in cream with gold feet" }
-        : p,
+    cardImage: atalianPhoto("corner", "cream"),
+    photos: ATALIAN_CONFIGS.flatMap((cfg) =>
+      ATALIAN_COLOURS.map((c) => ({
+        src: atalianPhoto(cfg.id, c.file),
+        alt: `Atalian Chesterfield ${cfg.label} in ${c.name}`,
+        sizes: [cfg.variantLabel],
+        colour: c.name,
+      })),
     ),
   },
 

@@ -52,6 +52,8 @@ export function variantIllustration(
   switch (variant.label) {
     case "Corner":
       return { design: "corner", arms };
+    case "Armchair":
+      return { design: style, pieces: [1], arms };
     case "2 Seater":
       return { design: style, pieces: [2], arms };
     case "3 Seater":

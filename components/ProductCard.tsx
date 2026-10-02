@@ -25,7 +25,7 @@ export default function ProductCard({ product, index = 0 }: { product: ProductSu
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={product.slug === "atalian-sofa" ? "/products/atalian-sofa/corner" : `/products/${product.slug}`}
       className="group flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-charcoal/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-b from-sand to-stone/70">
