@@ -57,13 +57,15 @@ export default function CollectionPage({ title, description, products, crumb, ac
       </section>
 
       <section className="container-site mt-8">
-        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:px-0">
+        <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 py-1.5 md:mx-0 md:flex-wrap md:p-1.5">
           {filters.map((f) => (
             <Link
               key={f.href}
               href={f.href}
-              className={`flex-shrink-0 rounded-full px-4 py-2 font-body text-sm transition-colors ${
-                f.href === activeHref ? "bg-charcoal text-linen" : "bg-white text-charcoal/75 ring-1 ring-charcoal/10 hover:ring-charcoal/30"
+              className={`flex-shrink-0 rounded-full px-4 py-2 font-body text-sm ring-1 transition-colors ${
+                f.href === activeHref
+                  ? "bg-charcoal text-linen ring-charcoal"
+                  : "bg-white text-charcoal/75 ring-charcoal/10 hover:ring-charcoal/30"
               }`}
             >
               {f.label}

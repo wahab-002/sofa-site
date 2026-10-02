@@ -1,6 +1,7 @@
 import { isSupabaseConfigured, supabase } from "./supabase";
 import type { Product, ProductSummary, ProductWithDetails } from "./types";
 import { getProductMedia, mediaColours, productMedia } from "./productMedia";
+import { applyAtalianListingContext } from "./atalian";
 import {
   localAllProducts,
   localAllSlugs,
@@ -49,11 +50,25 @@ function toSummary(row: SummaryRow): ProductSummary {
     image: images[0]
       ? { url: images[0].image_url, alt: images[0].alt_text }
       : cardImage(product.slug, product.name),
+    href: product.slug === "atalian-sofa" ? "/products/atalian-sofa/full-set" : null,
   };
 }
 
 function toSummaries(data: unknown): ProductSummary[] {
   return ((data as SummaryRow[] | null) ?? []).map(toSummary);
+}
+
+function withAtalianContext(
+  rows: SummaryRow[] | null | undefined,
+  summaries: ProductSummary[],
+  ctx: { design?: string; size?: string; colour?: string },
+): ProductSummary[] {
+  return summaries.map((p) => {
+    if (p.slug !== "atalian-sofa") return p;
+    const row = (rows ?? []).find((r) => r.slug === "atalian-sofa");
+    const variants = (row?.product_variants ?? []).filter((v) => v.in_stock);
+    return applyAtalianListingContext(p, ctx, variants);
+  });
 }
 
 export async function getAllProducts(): Promise<ProductSummary[]> {
@@ -120,7 +135,7 @@ export async function getProductsByDesign(design: string): Promise<ProductSummar
 
   const { data, error } = await query.order("featured", { ascending: false });
   if (error || !data?.length) return localProductsByDesign(design);
-  return toSummaries(data);
+  return withAtalianContext(data as SummaryRow[], toSummaries(data), { design });
 }
 
 export async function getProductsBySize(size: string): Promise<ProductSummary[]> {
@@ -149,14 +164,14 @@ export async function getProductsBySize(size: string): Promise<ProductSummary[]>
     .eq("in_stock", true)
     .order("featured", { ascending: false });
   if (err2 || !data?.length) return localProductsBySize(size);
-  return toSummaries(data);
+  return withAtalianContext(data as SummaryRow[], toSummaries(data), { size });
 }
 
 export async function getProductsByColour(colour: string): Promise<ProductSummary[]> {
   const client = db();
   if (!client) return localProductsByColour(colour);
   const colourMap: Record<string, string[]> = {
-    "grey-sofas": ["Dark Grey", "Light Grey"],
+    "grey-sofas": ["Dark Grey", "Light Grey", "Grey"],
     "cream-sofas": ["Cream", "Beige"],
     "navy-sofas": ["Navy"],
     "black-sofas": ["Black"],
@@ -188,7 +203,11 @@ export async function getProductsByColour(colour: string): Promise<ProductSummar
     .eq("in_stock", true)
     .order("featured", { ascending: false });
   if (err2 || !data?.length) return localProductsByColour(colour);
-  return toSummaries(data).filter((p) => !excludedSlugs.has(p.slug));
+  return withAtalianContext(
+    data as SummaryRow[],
+    toSummaries(data).filter((p) => !excludedSlugs.has(p.slug)),
+    { colour },
+  );
 }
 
 export async function getRecommendations(currentSlug: string, limit = 4): Promise<ProductSummary[]> {

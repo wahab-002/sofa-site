@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { ProductColour, ProductImage } from "@/lib/types";
 import SofaIllustration, { type IllustrationSpec } from "@/components/SofaIllustration";
 import type { MediaPhoto } from "@/lib/productMedia";
+import ProductImageViewer from "./ProductImageViewer";
 
 type Props = {
   productName: string;
@@ -68,44 +69,47 @@ export default function ProductGallery({ productName, images, media, colour, fab
     const showingFabric = active === fabricIndex;
     const current = photos[Math.min(active, photos.length - 1)];
     const colourMismatch = !showingFabric && !!colour && !!current.colour && current.colour !== colour.name;
+    const lightboxGallery = [
+      ...photos.map((p) => ({ src: p.src, alt: p.alt })),
+      ...(colour?.close_up_url ? [{ src: colour.close_up_url, alt: `${colour.name} close-up` }] : []),
+    ];
 
     return (
       <div className="space-y-3">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-sand">
-          {showingFabric ? (
-            colour?.close_up_url ? (
-              <Image key={colour.close_up_url} src={colour.close_up_url} alt={`${colour.name} close-up`} fill sizes="(max-width: 1024px) 100vw, 55vw" className="animate-fade-in object-cover" />
-            ) : (
-              <div className="absolute inset-0 transition-colors duration-500" style={fabricTexture(fabric, hex)} />
-            )
+        {showingFabric ? (
+          colour?.close_up_url ? (
+            <ProductImageViewer
+              src={colour.close_up_url}
+              alt={`${colour.name} close-up`}
+              gallery={lightboxGallery}
+              sizes="(max-width: 1024px) 100vw, 55vw"
+            />
           ) : (
-            <Image
+            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-sand ring-1 ring-charcoal/5 md:aspect-[5/4]">
+              <div className="absolute inset-0 transition-colors duration-500" style={fabricTexture(fabric, hex)} />
+            </div>
+          )
+        ) : (
+          <div className="relative">
+            <ProductImageViewer
               key={current.src}
               src={current.src}
               alt={current.alt}
-              fill
+              gallery={lightboxGallery}
               priority
               sizes="(max-width: 1024px) 100vw, 55vw"
-              className="animate-fade-in object-cover"
             />
-          )}
-          {(colourMismatch || showingFabric) && colour && (
-            <p className="absolute bottom-3 left-3 flex items-center gap-2 rounded-full bg-white/90 py-1.5 pl-2 pr-3 font-body text-xs text-charcoal shadow-soft backdrop-blur md:bottom-4 md:left-4">
-              <span className="h-4 w-4 flex-shrink-0 rounded-full ring-1 ring-charcoal/15" style={swatchStyle(colour)} />
-              {showingFabric ? (
-                <span>
-                  {colour.name}
-                  {fabric && <span className="text-charcoal/50"> · {fabric}</span>}
-                </span>
-              ) : (
+            {colourMismatch && colour && (
+              <p className="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-2 rounded-full bg-white/90 py-1.5 pl-2 pr-3 font-body text-xs text-charcoal shadow-soft backdrop-blur md:bottom-4 md:left-4">
+                <span className="h-4 w-4 flex-shrink-0 rounded-full ring-1 ring-charcoal/15" style={swatchStyle(colour)} />
                 <span>
                   Shown in {current.colour}. <span className="font-semibold">Yours will be made in {colour.name}.</span>
                 </span>
-              )}
-            </p>
-          )}
-        </div>
-        <div className="no-scrollbar flex gap-2.5 overflow-x-auto pb-1 md:gap-3">
+              </p>
+            )}
+          </div>
+        )}
+        <div className="no-scrollbar flex gap-2.5 overflow-x-auto p-1.5 md:gap-3">
           {photos.map((img, i) => (
             <button
               key={img.src}
@@ -144,7 +148,7 @@ export default function ProductGallery({ productName, images, media, colour, fab
 
   return (
     <div className="space-y-3">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-b from-sand to-stone">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-gradient-to-b from-sand to-stone md:aspect-[5/4]">
         {view === "preview" ? (
           <>
             <div className="absolute inset-x-0 bottom-0 h-[26%] bg-gradient-to-b from-[#E4DBCD] to-[#DAD0BF]" />
@@ -171,7 +175,7 @@ export default function ProductGallery({ productName, images, media, colour, fab
         </p>
       </div>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 p-1.5">
         {views.map((v, i) => (
           <button
             key={v}

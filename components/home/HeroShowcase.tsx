@@ -8,12 +8,12 @@ import { formatPrice } from "@/lib/site";
 
 const featured = [
   {
-    slug: "atalian-sofa/corner",
+    slug: "atalian-sofa/full-set",
     name: "Atalian Chesterfield",
-    image: "/products/atalian/corner/cream.webp",
+    image: "/products/atalian/full-set/cream.webp",
     colour: "Cream",
-    price: 1249,
-    label: "Corner",
+    price: 1349,
+    label: "Full Set",
   },
   {
     slug: "falcon-sofa",

@@ -72,6 +72,8 @@ export type ProductSummary = Product & {
   from_price: number;
   set_price: number | null;
   image: { url: string; alt: string | null } | null;
+  /** Override product card link (e.g. Atalian size/config pages). */
+  href?: string | null;
 };
 
 export type Category = {

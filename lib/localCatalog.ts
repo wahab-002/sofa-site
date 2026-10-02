@@ -8,11 +8,31 @@ import type {
   ProductWithDetails,
 } from "./types";
 import { getProductMedia, mediaColours } from "./productMedia";
+import { applyAtalianListingContext } from "./atalian";
 
 const fabrics = (id: string): ProductFabric[] => [
   { id: `${id}-velvet`, product_id: id, name: "Plush Velvet", in_stock: true },
   { id: `${id}-chenille`, product_id: id, name: "Chenille", in_stock: true },
   { id: `${id}-leather`, product_id: id, name: "Leather", in_stock: true },
+];
+
+const standardExtras = (id: string): ProductExtra[] => [
+  {
+    id: `${id}-footstool`,
+    product_id: id,
+    name: "Footstool",
+    price_gbp: 199,
+    image_url: null,
+    in_stock: true,
+  },
+  {
+    id: `${id}-coffee-table`,
+    product_id: id,
+    name: "Coffee Table",
+    price_gbp: 249,
+    image_url: null,
+    in_stock: true,
+  },
 ];
 
 const colour = (id: string, name: string, hex: string): ProductColour => ({
@@ -87,7 +107,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-verona"),
     fabrics: fabrics("local-verona"),
-    extras: [],
+    extras: standardExtras("local-verona"),
   },
   {
     product: {
@@ -121,7 +141,7 @@ const seeds: Seed[] = [
       { id: "local-oakland-leather", product_id: "local-oakland", name: "Leather", in_stock: true },
       { id: "local-oakland-tech", product_id: "local-oakland", name: "Tech Leather", in_stock: true },
     ],
-    extras: [],
+    extras: standardExtras("local-oakland"),
   },
   {
     product: {
@@ -148,7 +168,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-malibu"),
     fabrics: fabrics("local-malibu"),
-    extras: [],
+    extras: standardExtras("local-malibu"),
   },
   {
     product: {
@@ -185,7 +205,7 @@ const seeds: Seed[] = [
       colour("local-atalian", "Pink", "#C9A0A8"),
     ],
     fabrics: fabrics("local-atalian"),
-    extras: [],
+    extras: standardExtras("local-atalian"),
   },
   {
     product: {
@@ -208,7 +228,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-bishop"),
     fabrics: fabrics("local-bishop"),
-    extras: [],
+    extras: standardExtras("local-bishop"),
   },
   {
     product: {
@@ -234,7 +254,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-borrius"),
     fabrics: fabrics("local-borrius"),
-    extras: [],
+    extras: standardExtras("local-borrius"),
   },
   {
     product: {
@@ -261,16 +281,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-falcon"),
     fabrics: fabrics("local-falcon"),
-    extras: [
-      {
-        id: "local-falcon-ottoman",
-        product_id: "local-falcon",
-        name: "Matching Ottoman",
-        price_gbp: 199,
-        image_url: null,
-        in_stock: true,
-      },
-    ],
+    extras: standardExtras("local-falcon"),
   },
   {
     product: {
@@ -296,16 +307,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-lily"),
     fabrics: fabrics("local-lily"),
-    extras: [
-      {
-        id: "local-lily-ottoman",
-        product_id: "local-lily",
-        name: "Matching Ottoman",
-        price_gbp: 179,
-        image_url: null,
-        in_stock: true,
-      },
-    ],
+    extras: standardExtras("local-lily"),
   },
   {
     product: {
@@ -331,7 +333,7 @@ const seeds: Seed[] = [
     ]),
     colours: standardColours("local-olympia"),
     fabrics: fabrics("local-olympia"),
-    extras: [],
+    extras: standardExtras("local-olympia"),
   },
 ];
 
@@ -344,7 +346,7 @@ function toSummary(seed: Seed): ProductSummary {
     colours.map(({ name, hex_code, swatch_url }) => ({ name, hex_code, swatch_url: swatch_url ?? null })),
     (c) => ({ name: c.name, hex_code: c.hex, swatch_url: c.swatch ?? null }),
   );
-  return {
+  const summary: ProductSummary = {
     ...product,
     colours: mappedColours,
     from_price: prices.length ? Math.min(...prices) : product.base_price,
@@ -352,7 +354,20 @@ function toSummary(seed: Seed): ProductSummary {
     image: media
       ? { url: media.cardImage, alt: product.name }
       : null,
+    href: product.slug === "atalian-sofa" ? "/products/atalian-sofa/full-set" : null,
   };
+  return summary;
+}
+
+function withAtalianContext(
+  products: ProductSummary[],
+  ctx: { design?: string; size?: string; colour?: string },
+): ProductSummary[] {
+  return products.map((p) => {
+    if (p.slug !== "atalian-sofa") return p;
+    const seed = seeds.find((s) => s.product.slug === "atalian-sofa");
+    return applyAtalianListingContext(p, ctx, seed?.variants ?? []);
+  });
 }
 
 function toDetails(seed: Seed): ProductWithDetails {
@@ -401,14 +416,15 @@ export function localProductBySlug(slug: string): ProductWithDetails | null {
 
 export function localProductsByDesign(design: string): ProductSummary[] {
   const all = localAllProducts();
-  if (design === "corner-sofas") return all.filter((p) => p.has_corner);
-  if (design === "chesterfield-sofas") return all.filter((p) => p.design_type === "chesterfield");
-  if (design === "u-shape-sofas") return all.filter((p) => p.design_type === "u-shape");
-  if (design === "modular-sofas") return all.filter((p) => p.design_type === "modular");
-  if (design === "3-2-sofa-sets" || design === "3-2-1-full-sets") {
-    return all.filter((p) => ["regular", "chesterfield"].includes(p.design_type));
+  let filtered = all;
+  if (design === "corner-sofas") filtered = all.filter((p) => p.has_corner);
+  else if (design === "chesterfield-sofas") filtered = all.filter((p) => p.design_type === "chesterfield");
+  else if (design === "u-shape-sofas") filtered = all.filter((p) => p.design_type === "u-shape");
+  else if (design === "modular-sofas") filtered = all.filter((p) => p.design_type === "modular");
+  else if (design === "3-2-sofa-sets" || design === "3-2-1-full-sets") {
+    filtered = all.filter((p) => ["regular", "chesterfield"].includes(p.design_type));
   }
-  return all;
+  return withAtalianContext(filtered, { design });
 }
 
 export function localProductsBySize(size: string): ProductSummary[] {
@@ -421,14 +437,15 @@ export function localProductsBySize(size: string): ProductSummary[] {
   };
   const seats = seatMap[size];
   if (!seats) return [];
-  return seeds
+  const filtered = seeds
     .filter((s) => s.variants.some((v) => v.seats === seats || (seats >= 5 && (v.seats ?? 0) >= seats)))
     .map(toSummary);
+  return withAtalianContext(filtered, { size });
 }
 
 export function localProductsByColour(colourSlug: string): ProductSummary[] {
   const colourMap: Record<string, string[]> = {
-    "grey-sofas": ["Dark Grey", "Light Grey"],
+    "grey-sofas": ["Dark Grey", "Light Grey", "Grey"],
     "cream-sofas": ["Cream", "Beige"],
     "navy-sofas": ["Navy"],
     "black-sofas": ["Black"],
@@ -436,7 +453,8 @@ export function localProductsByColour(colourSlug: string): ProductSummary[] {
   };
   const names = colourMap[colourSlug] || [];
   if (!names.length) return [];
-  return localAllProducts().filter((p) => p.colours.some((c) => names.includes(c.name)));
+  const filtered = localAllProducts().filter((p) => p.colours.some((c) => names.includes(c.name)));
+  return withAtalianContext(filtered, { colour: colourSlug });
 }
 
 export function localRecommendations(currentSlug: string, limit = 4): ProductSummary[] {

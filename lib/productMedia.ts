@@ -133,7 +133,7 @@ export const productMedia: Record<string, ProductMedia> = {
   },
 
   "atalian-sofa": {
-    cardImage: atalianPhoto("corner", "cream"),
+    cardImage: atalianPhoto("full-set", "cream"),
     photos: ATALIAN_CONFIGS.flatMap((cfg) =>
       ATALIAN_COLOURS.map((c) => ({
         src: atalianPhoto(cfg.id, c.file),

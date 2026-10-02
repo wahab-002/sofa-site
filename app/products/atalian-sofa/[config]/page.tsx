@@ -43,13 +43,53 @@ export default async function AtalianConfigPage({ params }: Props) {
   ]);
   if (!product) return notFound();
 
-  const prices = Object.fromEntries(product.variants.map((v) => [v.label, v.price_gbp]));
+  const fabricNames = product.fabrics.map((f) => f.name).join(", ");
+  const details = [
+    {
+      title: "About this sofa",
+      body: <p>{product.description}</p>,
+      open: true,
+    },
+    {
+      title: "Sizes & options",
+      body: (
+        <ul className="space-y-1.5">
+          {product.variants.map((v) => (
+            <li key={v.id} className="flex justify-between border-b border-charcoal/5 pb-1.5">
+              <span>{v.label}</span>
+              <span className="font-medium text-charcoal">£{v.price_gbp.toLocaleString("en-GB")}</span>
+            </li>
+          ))}
+          <li className="pt-2">
+            Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"} and {fabricNames}.
+          </li>
+        </ul>
+      ),
+    },
+    {
+      title: "Delivery & payment",
+      body: (
+        <p>
+          Free UK delivery on every order, with most orders dispatched within 7 days. There&apos;s no deposit and nothing to
+          pay online. You pay cash on delivery when your sofa arrives.
+        </p>
+      ),
+    },
+    {
+      title: "Care guide",
+      body: (
+        <p>
+          Plump and rotate cushions regularly to keep their shape. Vacuum fabric with a soft brush attachment and blot
+          spills straight away with a clean, damp cloth. Wipe leather with a soft dry cloth and keep it out of direct
+          sunlight.
+        </p>
+      ),
+    },
+  ];
 
   return (
-    <>
-      <AtalianConfigNav active={config.id} prices={prices} />
-
-      <div className="container-site py-8 md:py-12">
+    <div className="pb-24 lg:pb-0">
+      <div className="container-site pb-6 pt-6">
         <Breadcrumb
           items={[
             { label: "Home", href: "/" },
@@ -58,38 +98,59 @@ export default async function AtalianConfigPage({ params }: Props) {
             { label: config.label },
           ]}
         />
-
-        <div className="mt-6">
-          <AtalianConfigurator product={product} config={config} />
-        </div>
-
-        <div className="mt-16">
-          <HowToOrder />
-        </div>
-
-        {recommendations.length > 0 && (
-          <section className="mt-16">
-            <div className="mb-6 flex items-end justify-between gap-4">
-              <div>
-                <p className="eyebrow">Keep browsing</p>
-                <h2 className="mt-1 font-display text-3xl font-semibold text-charcoal">You may also like</h2>
-              </div>
-              <Link href="/shop/all" className="hidden items-center gap-1 font-body text-sm font-medium text-forest md:inline-flex">
-                View all sofas <Icon name="arrow" className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
-              {recommendations.map((p, i) => (
-                <ProductCard key={p.id} product={p} index={i} />
-              ))}
-            </div>
-          </section>
-        )}
-
-        <div className="mt-16">
-          <Faq />
-        </div>
+        <AtalianConfigNav active={config.id} />
       </div>
-    </>
+
+      <section className="container-site">
+        <AtalianConfigurator product={product} config={config}>
+          <div className="mt-8 divide-y divide-charcoal/10 border-y border-charcoal/10">
+            {details.map((d) => (
+              <details key={d.title} className="group py-4" open={d.open}>
+                <summary className="flex cursor-pointer items-center justify-between font-display text-lg font-semibold text-charcoal">
+                  {d.title}
+                  <Icon name="chevron" className="h-5 w-5 text-charcoal/50 transition-transform group-open:rotate-180" />
+                </summary>
+                <div className="mt-3 font-body text-[15px] leading-relaxed text-charcoal/65">{d.body}</div>
+              </details>
+            ))}
+          </div>
+        </AtalianConfigurator>
+      </section>
+
+      <section className="container-site mt-20">
+        <div className="mb-8">
+          <p className="eyebrow">Ordering is easy</p>
+          <h2 className="section-title mt-2">Three steps to your new sofa</h2>
+        </div>
+        <HowToOrder compact />
+      </section>
+
+      {recommendations.length > 0 && (
+        <section className="container-site mt-20">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow">Keep browsing</p>
+              <h2 className="section-title mt-2">You may also like</h2>
+            </div>
+            <Link href="/shop/all" className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-forest hover:underline">
+              View all sofas <Icon name="arrow" className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-4">
+            {recommendations.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="container-site mt-20 grid gap-10 lg:grid-cols-[1fr_1.6fr]">
+        <div>
+          <p className="eyebrow">Good to know</p>
+          <h2 className="section-title mt-2">Questions, answered</h2>
+        </div>
+        <Faq />
+      </section>
+    </div>
   );
 }
