@@ -10,5 +10,11 @@ const useLocalCatalog = process.env.NEXT_PUBLIC_USE_LOCAL_CATALOG === "true";
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && !useLocalCatalog);
 
 export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  ? createClient(supabaseUrl!, supabaseAnonKey!, {
+      global: {
+        // Avoid Next.js fetch Data Cache serving stale catalog rows after syncs.
+        fetch: (input: RequestInfo | URL, init?: RequestInit) =>
+          fetch(input, { ...init, cache: "no-store" }),
+      },
+    })
   : null;
