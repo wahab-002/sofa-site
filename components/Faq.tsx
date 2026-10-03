@@ -5,7 +5,7 @@ export type FaqItem = { q: string; a: string };
 export const generalFaqs: FaqItem[] = [
   {
     q: "How do I order?",
-    a: "Choose your sofa, size, colour and fabric on the product page, then tap “Order on WhatsApp”. Your order details are sent to us automatically and a real person will confirm the price and arrange your delivery.",
+    a: "Choose your sofa, size and colour on the product page, then tap “Order on WhatsApp”. Your order details are sent to us automatically and a real person will confirm the price and arrange your delivery.",
   },
   {
     q: "Do I need to pay anything upfront?",
@@ -18,10 +18,6 @@ export const generalFaqs: FaqItem[] = [
   {
     q: "How long does delivery take?",
     a: "Most orders are dispatched within 7 days. We’ll confirm your delivery date on WhatsApp when you place your order.",
-  },
-  {
-    q: "Which fabric should I choose?",
-    a: "Plush Velvet is soft with a rich sheen, Chenille is textured and hard-wearing for busy homes, and Leather is durable and easy to wipe clean. Message us if you’d like help choosing.",
   },
 ];
 

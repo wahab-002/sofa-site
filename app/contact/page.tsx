@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const topics = [
   { icon: "sofa", title: "Place an order", message: "Hi, I'd like to place an order." },
   { icon: "truck", title: "Delivery questions", message: "Hi, I have a question about delivery." },
-  { icon: "palette", title: "Colour & fabric advice", message: "Hi, can you help me choose a colour and fabric?" },
+  { icon: "palette", title: "Colour advice", message: "Hi, can you help me choose a colour?" },
   { icon: "home", title: "Help with sizing", message: "Hi, can you help me choose the right size sofa for my room?" },
 ];
 

@@ -10,8 +10,8 @@ const armStyles: Record<string, ArmStyle> = {
   "dino-sofa": "round",
   "harrison-sofa": "square",
   "atalian-sofa": "slim",
-  "bishop-sofa": "round",
-  "borrius-sofa": "round",
+  "bishop-u-shape": "round",
+  "sloane-borrius-modular": "round",
   "olympia-sofa": "slim",
 };
 
@@ -21,8 +21,8 @@ const cardDesigns: Record<string, IllustrationSpec["design"]> = {
   "ashton-sofa": "corner",
   "falcon-sofa": "corner",
   "atalian-sofa": "chesterfield",
-  "borrius-sofa": "corner",
-  "bishop-sofa": "u-shape",
+  "sloane-borrius-modular": "corner",
+  "bishop-u-shape": "u-shape",
   "olympia-sofa": "chesterfield",
 };
 

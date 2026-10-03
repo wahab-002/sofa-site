@@ -1,4 +1,14 @@
 import { ATALIAN_COLOURS, ATALIAN_CONFIGS, atalianPhoto } from "./atalian";
+import { DINO_COLOURS, DINO_CONFIGS, DINO_DEFAULT_CONFIG, dinoPhoto } from "./dino";
+import { LILY_COLOURS, LILY_CONFIGS, LILY_DEFAULT_CONFIG, lilyPhoto } from "./lily";
+import {
+  VERONA_COLOURS,
+  VERONA_CONFIGS,
+  VERONA_DEFAULT_CONFIG,
+  VERONA_DEFAULT_STYLE,
+  VERONA_STYLES,
+  veronaPhoto,
+} from "./verona";
 
 export type BackStyle = {
   id: string;
@@ -30,13 +40,11 @@ export type ProductMedia = {
   photos: MediaPhoto[];
 };
 
-const verona = (file: string) => `/products/verona/${file}.webp`;
 const oakland = (file: string) => `/products/oakland/${file}.webp`;
 const malibu = (file: string) => `/products/malibu/${file}.webp`;
 const bishop = (file: string) => `/products/bishop/${file}.webp`;
 const borrius = (file: string) => `/products/borrius/${file}.webp`;
 const falcon = (file: string) => `/products/falcon/${file}.webp`;
-const lily = (file: string) => `/products/lily/${file}.webp`;
 const olympia = (file: string) => `/products/olympia/${file}.webp`;
 
 function gallery(pathFn: (f: string) => string, files: string[], alt: (n: number) => string, colour?: string): MediaPhoto[] {
@@ -49,39 +57,24 @@ function gallery(pathFn: (f: string) => string, files: string[], alt: (n: number
 
 export const productMedia: Record<string, ProductMedia> = {
   "verona-sofa": {
-    styles: [
-      {
-        id: "scatter-back",
-        name: "Scatter Back",
-        description: "Loose scatter cushions for a relaxed, layered look",
-      },
-      {
-        id: "high-back",
-        name: "High Back",
-        description: "Tall fixed back cushions for extra head and neck support",
-      },
-    ],
-    cardImage: verona("scatter-3seater-grey"),
-    photos: [
-      { src: verona("scatter-3seater-grey"), alt: "Verona Scatter Back 3 seater sofa in light grey", style: "scatter-back", sizes: ["3 Seater"], colour: "Light Grey" },
-      { src: verona("scatter-32-grey"), alt: "Verona Scatter Back 3+2 sofa set in light grey", style: "scatter-back", sizes: ["3+2 Set", "3+2+1 Full Set"], colour: "Light Grey" },
-      { src: verona("scatter-32-black"), alt: "Verona Scatter Back 3+2 sofa set in black", style: "scatter-back", sizes: ["3+2 Set", "3+2+1 Full Set"], colour: "Black" },
-      { src: verona("scatter-32-beige"), alt: "Verona Scatter Back 3+2 sofa set in beige", style: "scatter-back", sizes: ["3+2 Set", "3+2+1 Full Set"], colour: "Beige" },
-      { src: verona("scatter-corner-grey"), alt: "Verona Scatter Back corner sofa in light grey", style: "scatter-back", sizes: ["Corner"], colour: "Light Grey" },
-      { src: verona("scatter-corner-black"), alt: "Verona Scatter Back corner sofa in black", style: "scatter-back", sizes: ["Corner"], colour: "Black" },
-      { src: verona("scatter-2seater-grey"), alt: "Verona Scatter Back 2 seater sofa in light grey", style: "scatter-back", sizes: ["2 Seater"], colour: "Light Grey" },
-      { src: verona("scatter-armchair-grey"), alt: "Verona Scatter Back armchair in light grey", style: "scatter-back", sizes: ["3+2+1 Full Set"], colour: "Light Grey" },
-
-      { src: verona("high-32-black"), alt: "Verona High Back 3+2 sofa set in black", style: "high-back", sizes: ["3+2 Set", "3 Seater"], colour: "Black" },
-      { src: verona("high-321-black"), alt: "Verona High Back 3+2+1 sofa set in black", style: "high-back", sizes: ["3+2+1 Full Set"], colour: "Black" },
-      { src: verona("high-corner-grey"), alt: "Verona High Back corner sofa in light grey", style: "high-back", sizes: ["Corner"], colour: "Light Grey" },
-      { src: verona("high-corner-black"), alt: "Verona High Back corner sofa in black", style: "high-back", sizes: ["Corner"], colour: "Black" },
-      { src: verona("high-corner-beige"), alt: "Verona High Back corner sofa in beige", style: "high-back", sizes: ["Corner"], colour: "Beige" },
-      { src: verona("high-2seater-grey"), alt: "Verona High Back 2 seater sofa in light grey", style: "high-back", sizes: ["2 Seater"], colour: "Light Grey" },
-      { src: verona("high-armchair-grey"), alt: "Verona High Back armchair in light grey", style: "high-back", sizes: ["3+2+1 Full Set"], colour: "Light Grey" },
-
-      { src: verona("detail-arm-grey"), alt: "Close-up of the Verona's button-tufted scroll arm", colour: "Light Grey", detail: true },
-    ],
+    styles: VERONA_STYLES.map((s) => ({
+      id: s.id,
+      name: s.label,
+      description: s.description,
+    })),
+    colours: VERONA_COLOURS.map((c) => ({ name: c.name, hex: c.hex })),
+    cardImage: veronaPhoto(VERONA_DEFAULT_STYLE, VERONA_DEFAULT_CONFIG, "grey"),
+    photos: VERONA_STYLES.flatMap((style) =>
+      VERONA_CONFIGS.flatMap((cfg) =>
+        VERONA_COLOURS.map((c) => ({
+          src: veronaPhoto(style.id, cfg.id, c.file),
+          alt: `Verona ${style.label} ${cfg.label} in ${c.name}`,
+          style: style.id,
+          sizes: [cfg.variantLabel],
+          colour: c.name,
+        })),
+      ),
+    ),
   },
 
   "oakland-sofa": {
@@ -144,7 +137,7 @@ export const productMedia: Record<string, ProductMedia> = {
     ),
   },
 
-  "bishop-sofa": {
+  "bishop-u-shape": {
     cardImage: bishop("photo-01"),
     photos: gallery(
       bishop,
@@ -158,16 +151,16 @@ export const productMedia: Record<string, ProductMedia> = {
     ),
   },
 
-  "borrius-sofa": {
+  "sloane-borrius-modular": {
     cardImage: borrius("photo-01"),
     photos: gallery(
       borrius,
       ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05"],
-      (n) => `Borrius sofa — photo ${n}`,
+      (n) => `Sloane Borrius modular sofa — photo ${n}`,
       "Cream",
     ).map((p, i) =>
       i === 0
-        ? { ...p, sizes: ["Corner"], alt: "Borrius low-profile corner sofa in soft cream" }
+        ? { ...p, sizes: ["Corner"], alt: "Sloane Borrius low-profile corner sofa in soft cream" }
         : p,
     ),
   },
@@ -187,16 +180,28 @@ export const productMedia: Record<string, ProductMedia> = {
   },
 
   "lily-sofa": {
-    cardImage: lily("photo-01"),
-    photos: gallery(
-      lily,
-      ["photo-01", "photo-02", "photo-03", "photo-04", "photo-05"],
-      (n) => `Lily sofa — photo ${n}`,
-      "Dark Grey",
-    ).map((p, i) =>
-      i === 0
-        ? { ...p, sizes: ["3+2 Set", "3 Seater"], alt: "Lily channel-tufted 3+2 sofa set in charcoal grey" }
-        : p,
+    colours: LILY_COLOURS.map((c) => ({ name: c.name, hex: c.hex })),
+    cardImage: lilyPhoto(LILY_DEFAULT_CONFIG, "beige"),
+    photos: LILY_CONFIGS.flatMap((cfg) =>
+      LILY_COLOURS.map((c) => ({
+        src: lilyPhoto(cfg.id, c.file),
+        alt: `Lily Sofa ${cfg.label} in ${c.name}`,
+        sizes: [cfg.variantLabel],
+        colour: c.name,
+      })),
+    ),
+  },
+
+  "dino-sofa": {
+    colours: DINO_COLOURS.map((c) => ({ name: c.name, hex: c.hex })),
+    cardImage: dinoPhoto(DINO_DEFAULT_CONFIG, "beige-brown"),
+    photos: DINO_CONFIGS.flatMap((cfg) =>
+      DINO_COLOURS.map((c) => ({
+        src: dinoPhoto(cfg.id, c.file),
+        alt: `Dino Sofa ${cfg.label} in ${c.name}`,
+        sizes: [cfg.variantLabel],
+        colour: c.name,
+      })),
     ),
   },
 

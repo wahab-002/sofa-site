@@ -28,6 +28,7 @@ const paths: Record<string, React.ReactNode> = {
   ),
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
   arrow: <path d="M5 12h14M13 6l6 6-6 6" />,
+  arrowUp: <path d="M12 19V5M5 12l7-7 7 7" />,
   chevron: <path d="M6 9l6 6 6-6" />,
   plus: <path d="M12 5v14M5 12h14" />,
   close: <path d="M6 6l12 12M18 6L6 18" />,

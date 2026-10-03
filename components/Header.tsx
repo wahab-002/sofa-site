@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Icon, { WhatsAppIcon } from "./Icon";
-import SofaIllustration from "./SofaIllustration";
 import Logo from "./Logo";
 import { colourCategories, designCategories, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
+
+export type SofaNavLink = { name: string; href: string };
 
 const quickLinks = [
   { href: "/shop/corner-sofas", label: "Corner Sofas" },
@@ -15,7 +17,7 @@ const quickLinks = [
   { href: "/about", label: "About" },
 ];
 
-export default function Header() {
+export default function Header({ sofas = [] }: { sofas?: SofaNavLink[] }) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -129,17 +131,17 @@ export default function Header() {
             onMouseLeave={closeMega}
           >
             <div className="container-site grid grid-cols-12 gap-8 py-8">
-              <div className="col-span-5">
+              <div className="col-span-4">
                 <p className="eyebrow mb-4">Shop by design</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 gap-1.5 xl:grid-cols-2 xl:gap-2">
                   {designCategories.map((d) => (
                     <Link
                       key={d.slug}
                       href={`/shop/${d.slug}`}
                       className="group flex items-center gap-3 rounded-2xl p-2 transition-colors hover:bg-sand"
                     >
-                      <span className="flex h-14 w-20 flex-shrink-0 items-end rounded-xl bg-sand p-1.5 transition-colors group-hover:bg-white">
-                        <SofaIllustration spec={d.illustration} colour={d.colour} className="h-full w-full" />
+                      <span className="relative flex h-12 w-16 flex-shrink-0 overflow-hidden rounded-xl bg-sand xl:h-14 xl:w-20">
+                        <Image src={d.image} alt="" fill sizes="80px" className="object-cover" />
                       </span>
                       <span>
                         <span className="block font-body text-sm font-semibold text-charcoal">{d.label}</span>
@@ -156,7 +158,7 @@ export default function Header() {
                   {sizeCategories.map((s) => (
                     <li key={s.slug}>
                       <Link href={`/shop/size/${s.slug}`} className="block rounded-lg py-1.5 font-body text-sm text-charcoal/80 hover:text-forest">
-                        {s.label} Sofas
+                        {s.linkLabel}
                       </Link>
                     </li>
                   ))}
@@ -177,24 +179,27 @@ export default function Header() {
                 </ul>
               </div>
 
-              <Link
-                href="/shop/3-2-sofa-sets"
-                className="group relative col-span-3 flex flex-col justify-between overflow-hidden rounded-3xl bg-forest p-6 text-linen"
-              >
-                <div>
-                  <p className="font-body text-xs font-semibold uppercase tracking-[0.16em] text-gold">Best value</p>
-                  <p className="mt-2 font-display text-2xl font-semibold leading-tight">3+2 sofa sets from £749</p>
-                  <p className="mt-1 font-body text-sm text-linen/70">Two matching sofas. One easy price.</p>
-                </div>
-                <SofaIllustration spec={{ design: "sofa", pieces: [3, 2], arms: "round" }} colour="#C9B99A" className="mt-4 w-full" />
-                <span className="mt-3 inline-flex items-center gap-1.5 font-body text-sm font-medium">
-                  Shop sets <Icon name="arrow" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </span>
-              </Link>
+              <div className="col-span-4">
+                <p className="eyebrow mb-4">All sofas A–Z</p>
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-0.5">
+                  {sofas.map((s) => (
+                    <li key={s.href}>
+                      <Link
+                        href={s.href}
+                        className="block rounded-lg py-1.5 font-body text-sm text-charcoal/80 transition-colors hover:text-forest"
+                      >
+                        {s.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <div className="border-t border-charcoal/5 bg-sand/60">
               <div className="container-site flex items-center justify-between py-3 font-body text-sm">
-                <span className="text-charcoal/60">9 collections · 10 colours · 3 fabrics</span>
+                <span className="text-charcoal/60">
+                  {sofas.length} sofa{sofas.length === 1 ? "" : "s"} · {colourCategories.length} colours
+                </span>
                 <Link href="/shop/all" className="inline-flex items-center gap-1.5 font-medium text-forest hover:underline">
                   View all sofas <Icon name="arrow" className="h-4 w-4" />
                 </Link>
@@ -225,10 +230,11 @@ export default function Header() {
               <div className="grid grid-cols-2 gap-2">
                 {designCategories.map((d) => (
                   <Link key={d.slug} href={`/shop/${d.slug}`} className="rounded-2xl bg-white p-3 ring-1 ring-charcoal/5">
-                    <span className="flex h-12 items-end">
-                      <SofaIllustration spec={d.illustration} colour={d.colour} className="h-full w-full" />
+                    <span className="relative flex h-16 overflow-hidden rounded-xl">
+                      <Image src={d.image} alt="" fill sizes="160px" className="object-cover" />
+                      <span className="absolute inset-0 bg-gradient-to-t from-charcoal/70 to-transparent" />
+                      <span className="absolute bottom-1.5 left-2 z-10 text-xs font-semibold text-linen">{d.label}</span>
                     </span>
-                    <span className="mt-2 block text-sm font-semibold text-charcoal">{d.label}</span>
                   </Link>
                 ))}
               </div>
@@ -251,6 +257,22 @@ export default function Header() {
                   </Link>
                 ))}
               </div>
+
+              {sofas.length > 0 && (
+                <>
+                  <p className="eyebrow mb-3 mt-8">All sofas A–Z</p>
+                  <ul className="divide-y divide-charcoal/10 rounded-2xl bg-white ring-1 ring-charcoal/5">
+                    {sofas.map((s) => (
+                      <li key={s.href}>
+                        <Link href={s.href} className="flex items-center justify-between px-4 py-3 text-sm text-charcoal hover:text-forest">
+                          {s.name}
+                          <Icon name="arrow" className="h-3.5 w-3.5 text-charcoal/35" />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
 
               <div className="mt-8 divide-y divide-charcoal/10 border-y border-charcoal/10 text-base">
                 {[

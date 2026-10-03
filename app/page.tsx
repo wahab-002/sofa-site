@@ -5,11 +5,12 @@ import type { Metadata } from "next";
 import { getAllProducts } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
 import SofaIllustration from "@/components/SofaIllustration";
+import DesignTiles from "@/components/home/DesignTiles";
 import HeroShowcase from "@/components/home/HeroShowcase";
 import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
-import { colourCategories, designCategories, formatPrice, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
+import { colourCategories, formatPrice, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
 import { LOCAL_COLLECTION_COUNT } from "@/lib/localCatalog";
 
 export const metadata: Metadata = {
@@ -61,7 +62,7 @@ export default async function HomePage() {
             <span className="text-forest">Honest</span> prices.
           </h1>
           <p className="mt-6 max-w-lg font-body text-lg leading-relaxed text-charcoal/65">
-            {LOCAL_COLLECTION_COUNT} collections, 10 colours and 3 fabrics, from just{" "}
+            {LOCAL_COLLECTION_COUNT} collections and 10 colours, from just{" "}
             <span className="font-semibold text-charcoal">{formatPrice(fromPrice)}</span>. No deposit. Order on WhatsApp and pay cash on delivery.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -108,28 +109,7 @@ export default async function HomePage() {
       {/* Shop by design */}
       <section className="container-site py-20">
         <SectionHeading eyebrow="Find your style" title="Shop by design" href="/shop/all" linkLabel="View all sofas" />
-        <div className="grid grid-cols-2 gap-3 md:gap-5 lg:grid-cols-3">
-          {designCategories.map((d) => (
-            <Link
-              key={d.slug}
-              href={`/shop/${d.slug}`}
-              className="group relative flex aspect-[4/3] flex-col justify-between overflow-hidden rounded-3xl bg-sand p-4 transition-colors hover:bg-stone md:p-6"
-            >
-              <div className="relative z-10 flex items-start justify-between">
-                <div>
-                  <h3 className="font-display text-lg font-semibold text-charcoal md:text-2xl">{d.label}</h3>
-                  <p className="mt-0.5 hidden font-body text-sm text-charcoal/55 md:block">{d.desc}</p>
-                </div>
-                <span className="hidden h-10 w-10 items-center justify-center rounded-full bg-white text-charcoal transition-transform group-hover:translate-x-1 md:flex">
-                  <Icon name="arrow" className="h-4 w-4" />
-                </span>
-              </div>
-              <div className="flex h-[55%] items-end justify-center transition-transform duration-700 group-hover:scale-105">
-                <SofaIllustration spec={d.illustration} colour={d.colour} className="h-full w-full" title={d.label} />
-              </div>
-            </Link>
-          ))}
-        </div>
+        <DesignTiles />
       </section>
 
       {/* Best sellers */}
@@ -175,7 +155,7 @@ export default async function HomePage() {
         <div className="rounded-3xl bg-white p-6 ring-1 ring-charcoal/5 md:p-10">
           <p className="eyebrow">Measure up</p>
           <h2 className="mt-2 font-display text-3xl font-semibold text-charcoal">Shop by size</h2>
-          <div className="mt-8 grid grid-cols-5 gap-2">
+          <div className="mt-8 grid grid-cols-3 gap-2 sm:grid-cols-6">
             {sizeCategories.map((s) => (
               <Link
                 key={s.slug}
@@ -183,7 +163,9 @@ export default async function HomePage() {
                 className="group flex flex-col items-center rounded-2xl bg-sand px-1 py-5 text-center transition-colors hover:bg-forest hover:text-linen"
               >
                 <span className="font-display text-4xl font-bold leading-none">{s.seats}</span>
-                <span className="mt-1 font-body text-xs text-charcoal/55 group-hover:text-linen/70">seater</span>
+                <span className="mt-1 font-body text-xs text-charcoal/55 group-hover:text-linen/70">
+                  {s.slug === "armchair" ? "armchair" : "seater"}
+                </span>
               </Link>
             ))}
           </div>

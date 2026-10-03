@@ -1,7 +1,7 @@
 import Icon from "./Icon";
 
 const steps = [
-  { icon: "palette", title: "Pick your sofa", desc: "Choose the size, colour and fabric. The price updates as you go." },
+  { icon: "palette", title: "Pick your sofa", desc: "Choose the size and colour. The price updates as you go." },
   { icon: "chat", title: "Order on WhatsApp", desc: "One tap sends us your order. A real person confirms it and books your delivery." },
   { icon: "cash", title: "Pay on delivery", desc: "No deposit, no card details. Pay cash when your sofa arrives." },
 ];

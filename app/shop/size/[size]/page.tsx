@@ -7,6 +7,7 @@ import type { Metadata } from "next";
 export const dynamic = "force-dynamic";
 
 const sizeMeta: Record<string, { title: string; description: string }> = {
+  armchair: { title: "Armchairs UK", description: "Accent armchairs to match your sofa. Free UK delivery, cash on delivery." },
   "2-seater": { title: "2 Seater Sofas UK",  description: "Compact 2 seater sofas at unbeatable prices. Free UK delivery, cash on delivery." },
   "3-seater": { title: "3 Seater Sofas UK",  description: "Classic 3 seater sofas for every home. Great prices, free UK delivery." },
   "4-seater": { title: "4 Seater Sofas UK",  description: "Generous 4 seater sofas for family living. Free UK delivery." },
@@ -15,6 +16,7 @@ const sizeMeta: Record<string, { title: string; description: string }> = {
 };
 
 const sizeArt: Record<string, IllustrationSpec> = {
+  armchair: { design: "sofa", pieces: [1], arms: "round" },
   "2-seater": { design: "sofa", pieces: [2], arms: "round" },
   "3-seater": { design: "sofa", pieces: [3], arms: "round" },
   "4-seater": { design: "modular", modules: 4 },
@@ -35,7 +37,7 @@ export default async function ShopSizePage({ params }: Props) {
   if (!meta) return notFound();
 
   const products = await getProductsBySize(params.size);
-  const label = `${params.size.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())} Sofas`;
+  const label = params.size === "armchair" ? "Armchairs" : `${params.size.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase())} Sofas`;
 
   return (
     <CollectionPage

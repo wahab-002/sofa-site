@@ -1,14 +1,17 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import Icon, { WhatsAppIcon } from "./Icon";
+import BackToTop from "./BackToTop";
 import { WHATSAPP_DISPLAY, colourCategories, designCategories, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="mt-24 bg-charcoal font-body text-linen">
+    <footer className="relative mt-24 bg-charcoal font-body text-linen">
+      <BackToTop />
+
       {/* Trust strip */}
       <div className="border-b border-linen/10">
-        <div className="container-site grid grid-cols-2 gap-6 py-8 md:grid-cols-4">
+        <div className="container-site grid grid-cols-2 gap-6 py-8 pt-14 md:grid-cols-4 md:pt-16">
           {trustPoints.map((t) => (
             <div key={t.title} className="flex items-center gap-3">
               <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-linen/5 text-gold">
@@ -52,13 +55,17 @@ export default function Footer() {
 
         <FooterColumn title="Shop by size" className="md:col-span-2">
           {sizeCategories.map((s) => (
-            <FooterLink key={s.slug} href={`/shop/size/${s.slug}`}>{s.label} Sofas</FooterLink>
+            <FooterLink key={s.slug} href={`/shop/size/${s.slug}`}>{s.linkLabel}</FooterLink>
           ))}
         </FooterColumn>
 
         <FooterColumn title="Help" className="md:col-span-3">
           <FooterLink href="/about">About Us</FooterLink>
           <FooterLink href="/contact">Contact Us</FooterLink>
+          <FooterLink href="/delivery">Delivery</FooterLink>
+          <FooterLink href="/returns">Returns</FooterLink>
+          <FooterLink href="/privacy">Privacy</FooterLink>
+          <FooterLink href="/terms">Terms</FooterLink>
           <li className="pt-4">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-linen/40">Colours</p>
             <div className="flex gap-2">
@@ -79,7 +86,12 @@ export default function Footer() {
       <div className="border-t border-linen/10">
         <div className="container-site flex flex-col gap-2 py-5 text-xs text-linen/40 md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} The Sofa Hub. All rights reserved.</p>
-          <p>Free UK delivery · Cash on delivery · No deposit needed</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link href="/delivery" className="hover:text-linen">Delivery</Link>
+            <Link href="/returns" className="hover:text-linen">Returns</Link>
+            <Link href="/privacy" className="hover:text-linen">Privacy</Link>
+            <Link href="/terms" className="hover:text-linen">Terms</Link>
+          </div>
         </div>
       </div>
     </footer>

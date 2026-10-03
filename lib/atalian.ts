@@ -55,6 +55,7 @@ export function atalianConfigForContext(ctx: {
   if (ctx.design === "corner-sofas") return "corner";
   if (ctx.design === "3-2-sofa-sets") return "3-2-set";
   if (ctx.design === "3-2-1-full-sets") return "full-set";
+  if (ctx.size === "armchair") return "armchair";
   if (ctx.size === "2-seater") return "2-seater";
   if (ctx.size === "3-seater") return "3-seater";
   if (ctx.size === "5-seater") return "corner";

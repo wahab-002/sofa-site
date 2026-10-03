@@ -1,6 +1,7 @@
 import { getProductBySlug, getRecommendations, getAllProductSlugs } from "@/lib/products";
 import ProductConfigurator from "@/components/ProductConfigurator";
 import ProductCard from "@/components/ProductCard";
+import ProductJsonLd from "@/components/ProductJsonLd";
 import Breadcrumb from "@/components/Breadcrumb";
 import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
@@ -51,7 +52,6 @@ export default async function ProductPage({ params }: Props) {
 
   const design = designMeta[product.design_type];
   const fromPrice = product.variants.length ? Math.min(...product.variants.map((v) => v.price_gbp)) : product.base_price;
-  const fabricNames = product.fabrics.map((f) => f.name).join(", ");
   const backStyles = getProductMedia(product.slug)?.styles ?? [];
 
   const details = [
@@ -71,7 +71,7 @@ export default async function ProductPage({ params }: Props) {
             </li>
           ))}
           <li className="pt-2">
-            Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"} and {fabricNames}.
+            Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"}.
           </li>
           {backStyles.length > 1 && (
             <li>Choose a {backStyles.map((s) => s.name).join(" or ")} design at the same price.</li>
@@ -99,6 +99,12 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="pb-24 lg:pb-0">
+      <ProductJsonLd
+        product={product}
+        path={`/products/${product.slug}`}
+        image={product.images[0]?.image_url ?? getProductMedia(product.slug)?.cardImage}
+        fromPrice={fromPrice}
+      />
       <div className="container-site pb-6 pt-6">
         <Breadcrumb
           items={[

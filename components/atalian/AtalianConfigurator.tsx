@@ -5,10 +5,9 @@ import { useMemo, useState } from "react";
 import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import type { AtalianConfig, AtalianConfigId } from "@/lib/atalian";
 import { ATALIAN_COLOURS, ATALIAN_CONFIGS, atalianPhoto } from "@/lib/atalian";
-import { fabricInfo, formatPrice, whatsappLink } from "@/lib/site";
+import { formatPrice, whatsappLink } from "@/lib/site";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
-import { fabricTexture } from "@/components/product/ProductGallery";
 import ProductImageViewer from "@/components/product/ProductImageViewer";
 
 type Props = {
@@ -48,7 +47,6 @@ export default function AtalianConfigurator({ product, config, children }: Props
   );
 
   const [colour, setColour] = useState(colourOptions.find((c) => c.name === "Cream") ?? colourOptions[0]);
-  const [fabric, setFabric] = useState(product.fabrics[0] ?? null);
   const [comboVariant, setComboVariant] = useState(variant);
   const [selectedExtras, setSelectedExtras] = useState<ProductExtra[]>([]);
 
@@ -84,7 +82,6 @@ export default function AtalianConfigurator({ product, config, children }: Props
     `Hi, I'd like to order the ${product.name}.`,
     `Configuration: ${activeVariant?.label ?? config.label}`,
     `Colour: ${colour.name}`,
-    fabric ? `Fabric: ${fabric.name}` : "",
     selectedExtras.length > 0
       ? `Extras: ${selectedExtras.map((e) => `${e.name} (+£${e.price_gbp})`).join(", ")}`
       : "",
@@ -199,38 +196,6 @@ export default function AtalianConfigurator({ product, config, children }: Props
               <p className="mt-2 font-body text-sm text-charcoal/55">Selected: {colour.name}</p>
             </Section>
 
-            {product.fabrics.length > 0 && (
-              <Section step={++step} title="Choose your fabric" value={fabric?.name}>
-                <div className="grid gap-2 sm:grid-cols-3">
-                  {product.fabrics.map((f) => {
-                    const active = fabric?.id === f.id;
-                    return (
-                      <button
-                        key={f.id}
-                        onClick={() => setFabric(f)}
-                        className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-all ${
-                          active
-                            ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal"
-                            : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
-                        }`}
-                      >
-                        <span
-                          className="h-9 w-9 flex-shrink-0 rounded-lg ring-1 ring-charcoal/10"
-                          style={fabricTexture(f.name, colour.hex_code)}
-                        />
-                        <span>
-                          <span className="block font-body text-sm font-semibold text-charcoal">{f.name}</span>
-                          {fabricInfo[f.name] && (
-                            <span className="block font-body text-xs text-charcoal/50">{fabricInfo[f.name]}</span>
-                          )}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </Section>
-            )}
-
             {product.extras.length > 0 && (
               <Section step={++step} title="Complete the look" value="Optional">
                 <div className="space-y-2">
@@ -281,7 +246,6 @@ export default function AtalianConfigurator({ product, config, children }: Props
                 <span>
                   {activeVariant?.label ?? config.label}
                   {` · ${colour.name}`}
-                  {fabric ? ` · ${fabric.name}` : ""}
                 </span>
                 <span className="flex-shrink-0">{formatPrice(basePrice)}</span>
               </li>

@@ -9,6 +9,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
 import ProductCard from "@/components/ProductCard";
+import ProductJsonLd from "@/components/ProductJsonLd";
 import Icon from "@/components/Icon";
 
 export const dynamic = "force-dynamic";
@@ -43,7 +44,8 @@ export default async function AtalianConfigPage({ params }: Props) {
   ]);
   if (!product) return notFound();
 
-  const fabricNames = product.fabrics.map((f) => f.name).join(", ");
+  const variant = product.variants.find((v) => v.label === config.variantLabel);
+  const fromPrice = variant?.price_gbp ?? product.base_price;
   const details = [
     {
       title: "About this sofa",
@@ -61,7 +63,7 @@ export default async function AtalianConfigPage({ params }: Props) {
             </li>
           ))}
           <li className="pt-2">
-            Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"} and {fabricNames}.
+            Available in {product.colours.length} colour{product.colours.length === 1 ? "" : "s"}.
           </li>
         </ul>
       ),
@@ -89,6 +91,12 @@ export default async function AtalianConfigPage({ params }: Props) {
 
   return (
     <div className="pb-24 lg:pb-0">
+      <ProductJsonLd
+        product={product}
+        path={`/products/atalian-sofa/${config.id}`}
+        image={atalianPhoto(config.id, "cream")}
+        fromPrice={fromPrice}
+      />
       <div className="container-site pb-6 pt-6">
         <Breadcrumb
           items={[

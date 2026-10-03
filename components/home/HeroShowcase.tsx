@@ -24,23 +24,31 @@ const featured = [
     label: "3+2 Set",
   },
   {
-    slug: "bishop-sofa",
-    name: "Bishop U-Shape",
+    slug: "bishop-u-shape",
+    name: "Bishop U-Shape Sofa",
     image: "/products/bishop/photo-01.webp",
     colour: "Olive",
-    price: 1299,
+    price: 1199,
     label: "U-Shape",
   },
   {
-    slug: "lily-sofa",
+    slug: "lily-sofa/3-2-set",
     name: "Lily Sofa",
-    image: "/products/lily/photo-01.webp",
-    colour: "Dark Grey",
-    price: 949,
+    image: "/products/lily/3-2-set/beige.webp",
+    colour: "Beige",
+    price: 749,
     label: "3+2 Set",
   },
   {
-    slug: "olympia-sofa",
+    slug: "dino-sofa/3-2-set",
+    name: "Dino Sofa",
+    image: "/products/dino/3-2-set/beige-brown.webp",
+    colour: "Beige & Brown",
+    price: 749,
+    label: "3+2 Set",
+  },
+  {
+    slug: "olympia-sofa/full-set",
     name: "Olympia Chesterfield",
     image: "/products/olympia/photo-01.webp",
     colour: "Cream",
@@ -63,7 +71,7 @@ export default function HeroShowcase() {
 
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => setActive((i) => (i + 1) % featured.length), 3200);
+    const id = setInterval(() => setActive((i) => (i + 1) % featured.length), 2500);
     return () => clearInterval(id);
   }, [paused]);
 

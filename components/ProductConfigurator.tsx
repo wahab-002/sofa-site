@@ -5,10 +5,10 @@ import { useMemo, useState } from "react";
 import { getProductMedia, rankPhotos, type BackStyle } from "@/lib/productMedia";
 import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import WhatsAppButton from "./WhatsAppButton";
-import ProductGallery, { fabricTexture, swatchStyle } from "./product/ProductGallery";
+import ProductGallery, { swatchStyle } from "./product/ProductGallery";
 import Icon, { WhatsAppIcon } from "./Icon";
 import { variantIllustration } from "@/lib/illustration";
-import { fabricInfo, formatPrice, whatsappLink } from "@/lib/site";
+import { formatPrice, whatsappLink } from "@/lib/site";
 
 type Props = {
   product: ProductWithDetails;
@@ -18,14 +18,13 @@ type Props = {
 };
 
 export default function ProductConfigurator({ product, badge, fromPrice, children }: Props) {
-  const { name: productName, variants, colours, fabrics, extras, base_price: basePrice } = product;
+  const { name: productName, variants, colours, extras, base_price: basePrice } = product;
 
   const defaultVariant = variants.find((v) => v.label === "3+2 Set") ?? variants[0] ?? null;
   const [selectedVariant, setSelectedVariant] = useState(defaultVariant);
   const media = getProductMedia(product.slug);
   const photographedColour = colours.find((c) => c.name === media?.photos[0]?.colour);
   const [selectedColour, setSelectedColour] = useState(photographedColour ?? colours[0] ?? null);
-  const [selectedFabric, setSelectedFabric] = useState(fabrics[0] ?? null);
   const [selectedExtras, setSelectedExtras] = useState<ProductExtra[]>([]);
 
   const styles = media?.styles ?? [];
@@ -61,7 +60,6 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
       selectedVariant ? `Size: ${selectedVariant.label}` : "",
       selectedStyle ? `Back style: ${selectedStyle.name}` : "",
       selectedColour ? `Colour: ${selectedColour.name}` : "",
-      selectedFabric ? `Fabric: ${selectedFabric.name}` : "",
       selectedExtras.length > 0
         ? `Extras: ${selectedExtras.map((e) => `${e.name} (+£${e.price_gbp})`).join(", ")}`
         : "",
@@ -70,7 +68,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
     ]
       .filter(Boolean)
       .join("\n");
-  }, [productName, selectedVariant, selectedStyle, selectedColour, selectedFabric, selectedExtras, totalPrice]);
+  }, [productName, selectedVariant, selectedStyle, selectedColour, selectedExtras, totalPrice]);
 
   const spec = variantIllustration(product, selectedVariant);
   let step = 0;
@@ -86,7 +84,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
             media={galleryPhotos}
             resetKey={`${selectedStyle?.id}-${selectedVariant?.id}`}
             colour={selectedColour}
-            fabric={selectedFabric?.name ?? null}
+            fabric={null}
             spec={spec}
             sizeLabel={selectedVariant?.label ?? null}
           />
@@ -166,34 +164,6 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
                         <span className="block p-3">
                           <span className="block font-body text-sm font-semibold text-charcoal">{s.name}</span>
                           <span className="mt-0.5 block font-body text-xs leading-snug text-charcoal/55">{s.description}</span>
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </Section>
-            )}
-
-            {fabrics.length > 0 && (
-              <Section step={++step} title="Choose your fabric" value={selectedFabric?.name}>
-                <div className="grid gap-2 sm:grid-cols-3">
-                  {fabrics.map((f) => {
-                    const active = selectedFabric?.id === f.id;
-                    return (
-                      <button
-                        key={f.id}
-                        onClick={() => setSelectedFabric(f)}
-                        className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-all ${
-                          active ? "border-charcoal bg-white shadow-soft ring-1 ring-charcoal" : "border-charcoal/12 bg-white/60 hover:border-charcoal/40"
-                        }`}
-                      >
-                        <span
-                          className="h-9 w-9 flex-shrink-0 rounded-lg ring-1 ring-charcoal/10"
-                          style={selectedColour?.swatch_url ? swatchStyle(selectedColour) : fabricTexture(f.name, selectedColour?.hex_code ?? "#B0ADA8")}
-                        />
-                        <span>
-                          <span className="block font-body text-sm font-semibold text-charcoal">{f.name}</span>
-                          {fabricInfo[f.name] && <span className="block font-body text-xs text-charcoal/50">{fabricInfo[f.name]}</span>}
                         </span>
                       </button>
                     );
@@ -299,7 +269,6 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
                   {selectedVariant?.label ?? productName}
                   {selectedStyle && ` · ${selectedStyle.name}`}
                   {selectedColour && ` · ${selectedColour.name}`}
-                  {selectedFabric && ` · ${selectedFabric.name}`}
                 </span>
                 <span>{formatPrice(selectedVariant?.price_gbp ?? basePrice)}</span>
               </li>

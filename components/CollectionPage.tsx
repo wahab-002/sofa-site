@@ -44,7 +44,8 @@ export default function CollectionPage({ title, description, products, crumb, ac
             {fromPrice !== null && (
               <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 font-body text-sm text-charcoal/70">
                 <Icon name="tag" className="h-4 w-4 text-clay" />
-                {products.length} sofas from <span className="font-semibold text-charcoal">£{fromPrice.toLocaleString("en-GB")}</span>
+                {products.length} {title.toLowerCase().includes("armchair") ? "armchairs" : "sofas"} from{" "}
+                <span className="font-semibold text-charcoal">£{fromPrice.toLocaleString("en-GB")}</span>
               </p>
             )}
           </div>
@@ -84,7 +85,10 @@ export default function CollectionPage({ title, description, products, crumb, ac
             </Link>
           </div>
         ) : (
-          <ProductGrid products={products} />
+          <ProductGrid
+            products={products}
+            itemLabel={title.toLowerCase().includes("armchair") ? "armchair" : "sofa"}
+          />
         )}
       </section>
 

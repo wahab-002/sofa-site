@@ -25,7 +25,24 @@ export default function ProductCard({ product, index = 0 }: { product: ProductSu
 
   return (
     <Link
-      href={product.href ?? (product.slug === "atalian-sofa" ? "/products/atalian-sofa/full-set" : `/products/${product.slug}`)}
+      href={
+        product.href ??
+        (product.slug === "atalian-sofa"
+          ? "/products/atalian-sofa/full-set"
+          : product.slug === "verona-sofa"
+            ? "/products/verona-sofa/scatter-back/3-2-set"
+            : product.slug === "lily-sofa"
+              ? "/products/lily-sofa/3-2-set"
+              : product.slug === "dino-sofa"
+                ? "/products/dino-sofa/3-2-set"
+                : product.slug === "olympia-sofa"
+                  ? "/products/olympia-sofa/full-set"
+                  : product.slug === "ashton-sofa"
+                    ? "/products/ashton-sofa/3-2-set"
+                    : product.slug === "harrison-sofa"
+                      ? "/products/harrison-sofa/3-2-set"
+                      : `/products/${product.slug}`)
+      }
       className="group flex flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-charcoal/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-lift"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-b from-sand to-stone/70">
