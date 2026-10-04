@@ -12,6 +12,7 @@ import Faq from "@/components/Faq";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
 import { colourCategories, formatPrice, sizeCategories, trustPoints, whatsappLink } from "@/lib/site";
 import { LOCAL_COLLECTION_COUNT } from "@/lib/localCatalog";
+import { getAllGuides } from "@/lib/guides";
 
 export const metadata: Metadata = {
   title: "The Sofa Hub | Quality UK Sofas at Unbeatable Prices — Free Delivery",
@@ -210,6 +211,39 @@ export default async function HomePage() {
               <h3 className="mt-6 font-display text-xl font-semibold text-charcoal">{r.title}</h3>
               <p className="mt-2 font-body text-sm leading-relaxed text-charcoal/60">{r.desc}</p>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Buying Guides */}
+      <section className="container-site pb-20">
+        <SectionHeading
+          eyebrow="Expert Advice"
+          title="Sofa Buying & Style Guides"
+          subtitle="Tips on sizing, cushion styles and choosing the right sofa for your home."
+          href="/guides"
+          linkLabel="View all guides"
+        />
+        <div className="grid gap-6 md:grid-cols-3">
+          {getAllGuides().slice(0, 3).map((g) => (
+            <article
+              key={g.slug}
+              className="group flex flex-col rounded-3xl bg-white p-6 ring-1 ring-charcoal/10 transition-shadow hover:shadow-lift"
+            >
+              <span className="eyebrow text-xs text-forest">{g.category}</span>
+              <h3 className="mt-2 font-display text-lg font-semibold text-charcoal group-hover:text-forest">
+                <Link href={`/guides/${g.slug}`}>{g.title}</Link>
+              </h3>
+              <p className="mt-2 line-clamp-2 font-body text-xs leading-relaxed text-charcoal/65">
+                {g.description}
+              </p>
+              <div className="mt-4 pt-4 border-t border-charcoal/5 flex items-center justify-between font-body text-xs text-charcoal/50">
+                <span>{g.readingTime}</span>
+                <Link href={`/guides/${g.slug}`} className="font-semibold text-forest hover:underline">
+                  Read →
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       </section>
