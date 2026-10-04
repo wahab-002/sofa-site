@@ -60,6 +60,7 @@ export default function Footer() {
         </FooterColumn>
 
         <FooterColumn title="Help" className="md:col-span-3">
+          <FooterLink href="/guides">Buying Guides</FooterLink>
           <FooterLink href="/about">About Us</FooterLink>
           <FooterLink href="/contact">Contact Us</FooterLink>
           <FooterLink href="/delivery">Delivery</FooterLink>

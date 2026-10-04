@@ -14,6 +14,7 @@ const quickLinks = [
   { href: "/shop/corner-sofas", label: "Corner Sofas" },
   { href: "/shop/3-2-sofa-sets", label: "3+2 Sets" },
   { href: "/shop/chesterfield-sofas", label: "Chesterfields" },
+  { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },
 ];
 
@@ -277,6 +278,7 @@ export default function Header({ sofas = [] }: { sofas?: SofaNavLink[] }) {
               <div className="mt-8 divide-y divide-charcoal/10 border-y border-charcoal/10 text-base">
                 {[
                   { href: "/shop/all", label: "All Sofas" },
+                  { href: "/guides", label: "Buying Guides" },
                   { href: "/about", label: "About Us" },
                   { href: "/contact", label: "Contact" },
                 ].map((l) => (
