@@ -85,7 +85,12 @@ export default function Footer() {
 
       <div className="border-t border-linen/10">
         <div className="container-site flex flex-col gap-2 py-5 text-xs text-linen/40 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} The Sofa Hub. All rights reserved.</p>
+          <div>
+            <p>© {new Date().getFullYear()} The Sofa Hub (thesofahub.co.uk). All rights reserved.</p>
+            <p className="mt-1 text-[11px] text-linen/30">
+              Independent UK retailer · 100% Cash on Delivery on arrival · Not affiliated with third-party sites.
+            </p>
+          </div>
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             <Link href="/delivery" className="hover:text-linen">Delivery</Link>
             <Link href="/returns" className="hover:text-linen">Returns</Link>

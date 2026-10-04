@@ -56,15 +56,18 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
 
   const whatsappMessage = useMemo(() => {
     return [
-      `Hi, I'd like to order the ${productName}.`,
-      selectedVariant ? `Size: ${selectedVariant.label}` : "",
-      selectedStyle ? `Back style: ${selectedStyle.name}` : "",
-      selectedColour ? `Colour: ${selectedColour.name}` : "",
+      `Hi The Sofa Hub, I'd like to order:`,
+      `🛋️ Sofa: ${productName}`,
+      selectedVariant ? `• Size: ${selectedVariant.label}` : "",
+      selectedStyle ? `• Back Style: ${selectedStyle.name}` : "",
+      selectedColour ? `• Colour: ${selectedColour.name}` : "",
       selectedExtras.length > 0
-        ? `Extras: ${selectedExtras.map((e) => `${e.name} (+£${e.price_gbp})`).join(", ")}`
+        ? `• Extras: ${selectedExtras.map((e) => `${e.name} (+£${e.price_gbp})`).join(", ")}`
         : "",
-      `Total: £${totalPrice.toLocaleString()}`,
-      "Please confirm availability and delivery.",
+      `💰 Total: £${totalPrice.toLocaleString()} (Cash on Delivery - £0 Deposit)`,
+      `📍 My Delivery Postcode is: `,
+      "",
+      `Please confirm my delivery slot.`,
     ]
       .filter(Boolean)
       .join("\n");

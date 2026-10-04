@@ -1,9 +1,8 @@
 export const SITE_URL = "https://thesofahub.co.uk";
 export const SITE_NAME = "The Sofa Hub";
 
-/** Temporary placeholder until a business WhatsApp number is ready. */
-export const WHATSAPP_NUMBER = "447784000000";
-export const WHATSAPP_DISPLAY = "07784XXXXXX";
+export const WHATSAPP_NUMBER = "447784123321";
+export const WHATSAPP_DISPLAY = "07784 123321";
 
 /** Rewrite absolute own-host asset URLs to relative paths so local + prod both work. */
 export function toLocalAssetUrl(url: string): string {
