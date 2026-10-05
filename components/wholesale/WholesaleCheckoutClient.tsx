@@ -11,7 +11,14 @@ import {
   WHOLESALE_CART_KEY,
   type ValidatedWholesaleCart,
   type WholesaleCartLine,
+  type WholesaleSummaryLine,
 } from "@/lib/wholesaleCart";
+
+function isSummaryLine(
+  line: WholesaleCartLine | WholesaleSummaryLine,
+): line is WholesaleSummaryLine {
+  return "lineTotalGbp" in line && "productName" in line && "colourName" in line;
+}
 
 const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "";
 const stripePromise = publishableKey ? loadStripe(publishableKey) : null;
@@ -308,8 +315,7 @@ export default function WholesaleCheckoutClient() {
               <h2 className="font-display text-lg font-semibold text-charcoal">Order summary</h2>
               <ul className="mt-4 max-h-80 space-y-3 overflow-y-auto text-sm">
                 {(summary?.lines ?? lines).map((line, i) => {
-                  const isSummary = "productName" in line;
-                  if (isSummary) {
+                  if (isSummaryLine(line)) {
                     return (
                       <li
                         key={`${line.productId}-${line.sizeId}-${line.colourFile}-${i}`}
