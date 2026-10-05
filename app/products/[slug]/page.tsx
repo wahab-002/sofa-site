@@ -6,6 +6,7 @@ import Breadcrumb from "@/components/Breadcrumb";
 import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
 import Icon from "@/components/Icon";
+import ServerProductDescription from "@/components/product/ServerProductDescription";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -130,6 +131,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </ProductConfigurator>
       </section>
+
+      <ServerProductDescription product={product} />
 
       <section className="container-site mt-20">
         <div className="mb-8">

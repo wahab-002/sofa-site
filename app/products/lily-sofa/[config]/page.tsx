@@ -10,6 +10,7 @@ import HowToOrder from "@/components/HowToOrder";
 import Faq from "@/components/Faq";
 import ProductCard from "@/components/ProductCard";
 import ProductJsonLd from "@/components/ProductJsonLd";
+import ServerProductDescription from "@/components/product/ServerProductDescription";
 import Icon from "@/components/Icon";
 
 export const dynamic = "force-dynamic";
@@ -123,6 +124,8 @@ export default async function LilyConfigPage({ params }: Props) {
           </div>
         </LilyConfigurator>
       </section>
+
+      <ServerProductDescription product={product} configLabel={config.label} />
 
       <section className="container-site mt-20">
         <div className="mb-8">
