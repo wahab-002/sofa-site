@@ -130,21 +130,44 @@ export default function CollectionPage({ title, description, products, crumb, ac
             })}
           </div>
         </div>
-        <div className="flex flex-col justify-between rounded-3xl bg-forest p-6 text-linen md:p-8">
-          <div>
-            <p className="font-body text-xs font-semibold uppercase tracking-[0.16em] text-gold">Need a hand?</p>
-            <p className="mt-2 font-display text-2xl font-semibold">Not sure which sofa fits your room?</p>
-            <p className="mt-2 font-body text-linen/70">Send us your measurements and a photo of your space. We&apos;ll recommend the right size and style.</p>
+      </section>
+
+      {/* Buying Advice & FAQ Accordion for Category SEO */}
+      <section className="container-site mt-14 mb-8">
+        <div className="rounded-3xl border border-charcoal/10 bg-white p-6 md:p-10">
+          <span className="eyebrow text-forest">Shopping Advice</span>
+          <h2 className="mt-2 font-display text-2xl font-bold text-charcoal md:text-3xl">
+            Ordering Your {title} with Confidence
+          </h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-3 font-body text-sm text-charcoal/75">
+            <div className="rounded-2xl bg-sand/50 p-5">
+              <h3 className="font-display text-base font-semibold text-charcoal flex items-center gap-2">
+                <Icon name="truck" className="h-4 w-4 text-forest" />
+                Free 2-Man UK Delivery
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-charcoal/65">
+                Every {title.toLowerCase()} order includes complimentary 2-man room of choice delivery across mainland UK. Our team brings your new suite straight into your ground-floor living area with zero hidden courier fees.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-sand/50 p-5">
+              <h3 className="font-display text-base font-semibold text-charcoal flex items-center gap-2">
+                <Icon name="cash" className="h-4 w-4 text-forest" />
+                100% Cash on Delivery
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-charcoal/65">
+                Zero deposit required when ordering online or on WhatsApp. You inspect the sofa upholstery, stitching, firmness, and dimensions in your home before handing over payment to our drivers.
+              </p>
+            </div>
+            <div className="rounded-2xl bg-sand/50 p-5">
+              <h3 className="font-display text-base font-semibold text-charcoal flex items-center gap-2">
+                <Icon name="shield" className="h-4 w-4 text-forest" />
+                12-Month Guarantee
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-charcoal/65">
+                Built with reinforced timber frames, high-resilience reflex foam cushions, and durable upholstery compliant with all British Fire Safety standards. Backed by our 12-month structural warranty.
+              </p>
+            </div>
           </div>
-          <a
-            href={whatsappLink(`Hi, I'm looking at ${title}. Can you help me choose?`)}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="btn btn-light btn-md mt-6 self-start"
-          >
-            <WhatsAppIcon className="h-4 w-4 text-whatsapp" />
-            Get advice on WhatsApp
-          </a>
         </div>
       </section>
     </>

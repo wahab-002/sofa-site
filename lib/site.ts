@@ -1,4 +1,4 @@
-export const SITE_URL = "https://thesofahub.co.uk";
+export const SITE_URL = "https://www.thesofahub.co.uk";
 export const SITE_NAME = "The Sofa Hub";
 
 export const WHATSAPP_NUMBER = "447784123321";

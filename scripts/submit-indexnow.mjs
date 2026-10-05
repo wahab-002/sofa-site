@@ -2,7 +2,7 @@
 // Submit all site URLs to Bing & IndexNow search engines
 import https from "node:https";
 
-const HOST = "thesofahub.co.uk";
+const HOST = "www.thesofahub.co.uk";
 const KEY = "b7f29e1a84c24385a8163f538e12d4a0";
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 
