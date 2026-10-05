@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import SiteShell from "@/components/SiteShell";
 import { getAllProducts } from "@/lib/products";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -38,10 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en-GB" className={`${outfit.variable} ${inter.variable}`}>
       <body className="font-body">
-        <Header sofas={sofas} />
-        <main className="min-h-[60vh]">{children}</main>
-        <Footer />
-        <FloatingWhatsApp />
+        <SiteShell sofas={sofas}>{children}</SiteShell>
       </body>
     </html>
   );

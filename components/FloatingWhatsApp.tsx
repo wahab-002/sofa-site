@@ -6,8 +6,8 @@ import { whatsappLink } from "@/lib/site";
 
 export default function FloatingWhatsApp() {
   const pathname = usePathname();
-  // Product pages have their own sticky order bar.
-  if (pathname.startsWith("/products/")) return null;
+  // Product pages have their own sticky order bar; wholesale is card-pay only.
+  if (pathname.startsWith("/products/") || pathname.startsWith("/wholesale")) return null;
 
   return (
     <a

@@ -1,0 +1,70 @@
+cluster,keyword,tier,search_volume,keyword_difficulty,shop_hub,example_products
+corner-lshape,corner sofa,1,90500,29,/shop/corner-sofas,"Verona, Lily, Dino, Ashton, Harrison, Malibu, Oakland, Borrius, Atalian, Olympia, Falcon"
+corner-lshape,l shape sofa,1,22200,40,/shop/corner-sofas,"Verona, Lily, Dino, Ashton, Harrison, Malibu, Oakland, Borrius, Atalian, Olympia, Falcon"
+corner-lshape,small corner sofa,1,18100,28,/shop/corner-sofas,"Lily, Dino, Verona, Ashton"
+corner-lshape,leather corner sofa,1,8100,23,/shop/corner-sofas,"Oakland, Atalian, Olympia"
+corner-lshape,grey corner sofa,1,6600,16,/shop/colour/grey-sofas,"Verona, Malibu, Falcon, Dino"
+corner-lshape,cream corner sofa,1,4400,15,/shop/colour/cream-sofas,"Atalian, Olympia, Borrius"
+corner-lshape,beige corner sofa,1,4400,18,/shop/colour/cream-sofas,"Lily, Malibu, Dino"
+corner-lshape,cheap corner settees,1,4400,25,/shop/corner-sofas,"Harrison, Ashton, Verona"
+corner-lshape,cheap corner sofas,1,3600,22,/shop/corner-sofas,"Harrison, Ashton, Verona"
+corner-lshape,right hand corner sofa,2,5400,31,/shop/corner-sofas,"All corner products"
+corner-lshape,left hand corner sofa,2,4400,26,/shop/corner-sofas,"All corner products"
+3-2-sets,3 and 2 seater sofa,1,3600,22,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,sofa 3 + 2 seater set,1,3600,26,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,sofas 3 and a 2 seater,1,2900,20,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,3 seater and two seater sofas,1,2900,22,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,2 and 3 seater sofa set,1,1900,19,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,3 seater and 2 seater sofa,1,1900,22,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,2 3 seater sofa set,1,1900,24,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona, Lily, Dino, Olympia, Atalian, Oakland, Malibu, Falcon"
+3-2-sets,3+2 sofa set sale,2,1000,13,/shop/3-2-sofa-sets,"Harrison, Ashton"
+3-2-sets,3+2 sofa sets uk,2,210,17,/shop/3-2-sofa-sets,"Harrison, Ashton, Verona"
+3-2-sets,sofa 3+3 seater,2,12100,18,/shop/3-2-1-full-sets,"Full-set configs on set ranges"
+chesterfield,chesterfield sofa,1,18100,26,/shop/chesterfield-sofas,"Atalian, Olympia, Falcon"
+chesterfield,chesterfield sofas,1,3600,27,/shop/chesterfield-sofas,"Atalian, Olympia, Falcon"
+chesterfield,leather chesterfield sofa,2,2900,23,/shop/chesterfield-sofas,"Atalian, Olympia"
+chesterfield,grey chesterfield sofa,2,1300,14,/shop/chesterfield-sofas,"Atalian, Falcon"
+chesterfield,velvet chesterfield sofa,2,1000,10,/shop/chesterfield-sofas,"Atalian, Olympia, Falcon"
+u-shape,u shaped sofa,1,18100,14,/shop/u-shape-sofas,Bishop
+u-shape,u shape sofa,1,9900,16,/shop/u-shape-sofas,Bishop
+modular,modular sofa,2,18100,28,/shop/modular-sofas,Sloane Borrius
+size-armchair,armchair,1,33100,19,/shop/size/armchair,"Verona, Atalian, Lily, Dino, Olympia, Ashton, Harrison"
+size-2-seater,2 seater sofa,1,27100,30,/shop/size/2-seater,"All except Bishop"
+size-2-seater,two seater sofa,1,9900,22,/shop/size/2-seater,"All except Bishop"
+size-2-seater,2 seater sofas,2,8100,32,/shop/size/2-seater,"All except Bishop"
+size-2-seater,small 2 seater sofa,2,5400,28,/shop/size/2-seater,"Lily, Dino, Harrison, Ashton, Verona"
+size-2-seater,settee two seater,2,4400,24,/shop/size/2-seater,"All except Bishop"
+size-2-seater,2 seater leather sofa,2,3600,13,/shop/size/2-seater,Oakland
+size-2-seater,small two seater settees,2,3600,28,/shop/size/2-seater,"Lily, Dino, Harrison, Ashton"
+size-2-seater,small two seater sofa,2,2900,20,/shop/size/2-seater,"Lily, Dino, Harrison, Ashton, Verona"
+size-2-seater,two seater leather sofa,2,1900,16,/shop/size/2-seater,Oakland
+size-2-seater,grey 2 seater sofa,2,1900,14,/shop/colour/grey-sofas,"Verona, Falcon, Malibu, Dino"
+size-3-seater,3 seater sofa,1,22200,23,/shop/size/3-seater,"All except Bishop"
+size-3-seater,three seater sofa,1,3600,22,/shop/size/3-seater,"All except Bishop"
+size-3-seater,3 seater leather sofa,2,2900,16,/shop/size/3-seater,Oakland
+size-3-seater,3 seater sofas,2,2400,20,/shop/size/3-seater,"All except Bishop"
+size-3-seater,grey 3 seater sofa,2,1300,16,/shop/colour/grey-sofas,"Verona, Falcon, Malibu, Dino"
+size-3-seater,small 3 seater sofa,2,1300,23,/shop/size/3-seater,"Lily, Dino, Harrison, Ashton, Verona"
+material,leather sofa,1,18100,20,/shop/all,"Oakland; Atalian/Olympia leather options"
+material,brown leather sofa,2,4400,17,/shop/colour/brown-sofas,Oakland
+material,tan leather sofa,2,3600,13,/shop/colour/brown-sofas,Oakland
+material,black leather sofa,2,2900,16,/shop/colour/black-sofas,Oakland
+material,fabric sofas,2,2900,23,/shop/all,"Ashton, Harrison, Verona, Lily, Malibu, Borrius"
+material,grey fabric sofa,2,1000,15,/shop/colour/grey-sofas,"Verona, Falcon, Malibu"
+material,chenille fabric sofa,2,720,13,/shop/all,"Chenille ranges"
+material,jumbo cord fabric sofa,3,720,12,/products/dino-sofa,Dino
+style,high back sofa,3,2400,11,/products/verona-sofa,Verona
+style,scatter back sofa,3,480,11,/products/verona-sofa,Verona
+value-cod,cheap sofas,2,12100,48,/shop/all,"Harrison, Ashton, Verona"
+support-guides,how to clean leather couch,3,8100,20,/shop/all,FAQ later
+support-guides,how to clean fabric sofa,3,1300,13,/shop/all,FAQ later
+support-guides,sofas that come apart for small doorways,3,720,22,,Future guide
+hold-sofa-beds,sofa bed,hold,165000,58,,Not selling
+hold-sofa-beds,corner sofa bed,hold,33100,32,,Not selling
+hold-sofa-beds,double sofa bed,hold,12100,32,,Not selling
+hold-sofa-beds,2 seater sofa bed,hold,12100,18,,Not selling
+hold-sofa-beds,corner sofa bed with storage,hold,5400,20,,Not selling
+hold-recliners,recliner chair,hold,27100,22,,Not selling
+hold-recliners,recliner sofa,hold,14800,22,,Not selling
+hold-recliners,2 seater recliner sofa,hold,5400,9,,Not selling
+hold-recliners,reclining couch 2 seater,hold,5400,20,,Not selling
