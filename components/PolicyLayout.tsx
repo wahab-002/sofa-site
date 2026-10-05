@@ -47,7 +47,7 @@ export default function PolicyLayout({
         <a
           href={whatsappLink("Hi, I have a question about your policies.")}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="nofollow noopener noreferrer"
           className="font-medium text-forest hover:underline"
         >
           Message us on WhatsApp

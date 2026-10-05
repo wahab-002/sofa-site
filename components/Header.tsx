@@ -65,7 +65,7 @@ export default function Header({ sofas = [] }: { sofas?: SofaNavLink[] }) {
           <p className="md:hidden">
             <span className="text-gold">Free UK delivery</span> · Cash on delivery
           </p>
-          <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="hidden items-center gap-1.5 text-linen/80 hover:text-linen md:flex">
+          <a href={whatsappLink()} target="_blank" rel="nofollow noopener noreferrer" className="hidden items-center gap-1.5 text-linen/80 hover:text-linen md:flex">
             <WhatsAppIcon className="h-3.5 w-3.5 text-whatsapp" />
             Questions? Message us
           </a>
@@ -110,7 +110,7 @@ export default function Header({ sofas = [] }: { sofas?: SofaNavLink[] }) {
             <Link href="/contact" className="hidden px-3 font-body text-sm text-charcoal/70 hover:text-charcoal md:block lg:hidden xl:block">
               Contact
             </Link>
-            <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="btn btn-primary hidden px-5 py-2.5 text-sm sm:inline-flex">
+            <a href={whatsappLink()} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-primary hidden px-5 py-2.5 text-sm sm:inline-flex">
               <WhatsAppIcon className="h-4 w-4" />
               Order on WhatsApp
             </a>
@@ -291,7 +291,7 @@ export default function Header({ sofas = [] }: { sofas?: SofaNavLink[] }) {
             </div>
 
             <div className="border-t border-charcoal/10 p-5">
-              <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg w-full">
+              <a href={whatsappLink()} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-primary btn-lg w-full">
                 <WhatsAppIcon className="h-5 w-5" />
                 Order on WhatsApp
               </a>

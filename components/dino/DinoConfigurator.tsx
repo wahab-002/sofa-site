@@ -6,6 +6,7 @@ import type { ProductWithDetails, ProductExtra } from "@/lib/types";
 import type { DinoConfig, DinoConfigId } from "@/lib/dino";
 import { DINO_COLOURS, DINO_CONFIGS, dinoPhoto } from "@/lib/dino";
 import { formatPrice, whatsappLink } from "@/lib/site";
+import ProductCraftsmanship from "../product/ProductCraftsmanship";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
 import ProductImageViewer from "@/components/product/ProductImageViewer";
@@ -279,6 +280,8 @@ export default function DinoConfigurator({ product, config, children }: Props) {
             </div>
           </div>
 
+          <ProductCraftsmanship productName="Dino Sofa" />
+
           {children}
         </div>
       </div>
@@ -291,7 +294,7 @@ export default function DinoConfigurator({ product, config, children }: Props) {
             </p>
             <p className="font-display text-xl font-semibold text-charcoal">{formatPrice(price)}</p>
           </div>
-          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
+          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
             <WhatsAppIcon className="h-4 w-4" />
             Order now
           </a>

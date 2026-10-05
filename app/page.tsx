@@ -71,7 +71,7 @@ export default async function HomePage() {
               Shop all sofas
               <Icon name="arrow" className="h-5 w-5" />
             </Link>
-            <a href={whatsappLink("Hi, I'm looking for a sofa. Can you help?")} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg">
+            <a href={whatsappLink("Hi, I'm looking for a sofa. Can you help?")} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-secondary btn-lg">
               <WhatsAppIcon className="h-5 w-5 text-whatsapp" />
               Ask us anything
             </a>
@@ -256,7 +256,7 @@ export default async function HomePage() {
           <p className="mt-4 max-w-sm font-body text-charcoal/60">
             Can&apos;t find what you&apos;re looking for? We&apos;re one message away.
           </p>
-          <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-md mt-6">
+          <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-secondary btn-md mt-6">
             <WhatsAppIcon className="h-4 w-4 text-whatsapp" />
             Message us
           </a>
@@ -279,7 +279,7 @@ export default async function HomePage() {
               <Link href="/shop/all" className="btn btn-light btn-lg">
                 Shop all sofas
               </Link>
-              <a href={whatsappLink("Hi, I'd like to order a sofa.")} target="_blank" rel="noopener noreferrer" className="btn btn-lg bg-whatsapp text-charcoal hover:brightness-95">
+              <a href={whatsappLink("Hi, I'd like to order a sofa.")} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-lg bg-whatsapp text-charcoal hover:brightness-95">
                 <WhatsAppIcon className="h-5 w-5" />
                 Chat on WhatsApp
               </a>

@@ -13,47 +13,53 @@ export default function DeliveryPage() {
       intro="Every sofa we sell includes free mainland UK delivery. No delivery fees, no hidden charges."
       sections={[
         {
-          heading: "Where we deliver",
+          heading: "Free Mainland UK Delivery Coverage",
           body: (
             <>
               <p>
-                We deliver across mainland UK. If you&apos;re in Northern Ireland, the Scottish Highlands &amp; Islands,
-                or another remote postcode, message us on WhatsApp first and we&apos;ll confirm coverage and any
-                surcharge before you order.
+                Every sofa ordered from The Sofa Hub includes complimentary 2-man mainland UK delivery. We service England, Wales, and mainland Scotland without any hidden courier charges or surprise fuel surcharges.
+              </p>
+              <p className="mt-3">
+                For offshore postcodes, including the Scottish Highlands &amp; Islands, Isle of Wight, Isle of Man, and Northern Ireland, please send your delivery postcode to our team on WhatsApp before ordering so we can confirm vehicle schedule availability and route timing.
               </p>
             </>
           ),
         },
         {
-          heading: "How long it takes",
+          heading: "Dispatch Timelines & Delivery Slots",
           body: (
             <>
               <p>
-                Most orders are dispatched within 7 days. You&apos;ll get a confirmed delivery window on WhatsApp once
-                your order is booked. We&apos;ll keep you updated if anything changes.
+                Most popular sofa collections (including our corner groups, 3+2 sets, and recliners) are dispatched from our UK distribution warehouse within 3 to 7 working days.
+              </p>
+              <p className="mt-3">
+                Once your order is scheduled on our delivery van route, our logistics dispatcher will message you directly on WhatsApp with your allocated delivery date and estimated time window. The driver will also call you approximately 30 to 60 minutes prior to arrival so you have ample notice.
               </p>
             </>
           ),
         },
         {
-          heading: "On the day",
+          heading: "Room of Choice Placement & Access Preparation",
           body: (
             <>
               <p>
-                Our delivery team will bring your sofa into the room of your choice where access allows. Please make sure
-                doorways and stairs are clear. If you&apos;re unsure about access, send us room or doorway measurements
-                when you order and we&apos;ll advise.
+                Our professional 2-man delivery team will carefully carry your new sofa straight into your ground floor room of choice, provided there is clear and safe access.
+              </p>
+              <p className="mt-3">
+                Please ensure that your hallway, porch, entrance doorways, and interior walkways are clear of obstructions such as shoe racks, narrow consoles, and hanging frames prior to our team arriving. If you live in a property with tight staircase turns or narrow communal corridors, please measure your doorway dimensions beforehand or share photos on WhatsApp so we can verify clearance before loading the van.
               </p>
             </>
           ),
         },
         {
-          heading: "Payment on delivery",
+          heading: "100% Cash on Delivery — Inspect Before You Pay",
           body: (
             <>
               <p>
-                There&apos;s no deposit and nothing to pay online. You pay cash on delivery when your sofa arrives and
-                you&apos;re happy with it.
+                We operate on a transparent Cash on Delivery (COD) payment structure. There is zero deposit required when placing your order on WhatsApp and nothing to pay online.
+              </p>
+              <p className="mt-3">
+                When the delivery team arrives, you are fully entitled to inspect the sofa frame, fabric upholstery, cushions, and colour in your own home. Only once you are 100% satisfied with the quality and condition of your sofa do you hand over payment to our drivers in cash.
               </p>
             </>
           ),

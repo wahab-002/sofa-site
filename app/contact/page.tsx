@@ -32,7 +32,7 @@ export default function ContactPage() {
                 key={t.title}
                 href={whatsappLink(t.message)}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="nofollow noopener noreferrer"
                 className="group flex items-center gap-4 rounded-2xl bg-white p-4 ring-1 ring-charcoal/5 transition-all hover:shadow-soft hover:ring-charcoal/15"
               >
                 <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-sand text-forest">
@@ -52,7 +52,7 @@ export default function ContactPage() {
           <p className="mt-6 font-body text-sm text-linen/60">WhatsApp us on</p>
           <p className="font-display text-3xl font-semibold">{WHATSAPP_DISPLAY}</p>
           <p className="mt-3 font-body text-linen/70">Send a message any time and we&apos;ll get back to you as soon as we can.</p>
-          <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="noopener noreferrer" className="btn btn-lg mt-8 w-full bg-whatsapp text-charcoal hover:brightness-95">
+          <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-lg mt-8 w-full bg-whatsapp text-charcoal hover:brightness-95">
             <WhatsAppIcon className="h-5 w-5" />
             Start a chat
           </a>

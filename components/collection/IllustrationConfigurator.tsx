@@ -6,6 +6,7 @@ import type { ArmStyle, IllustrationSpec } from "@/components/SofaIllustration";
 import type { SofaConfig, SofaConfigId } from "@/lib/sofaCollection";
 import { SOFA_CONFIGS, sofaConfigArt } from "@/lib/sofaCollection";
 import { formatPrice, whatsappLink } from "@/lib/site";
+import ProductCraftsmanship from "../product/ProductCraftsmanship";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Icon, { WhatsAppIcon } from "@/components/Icon";
 import SofaIllustration from "@/components/SofaIllustration";
@@ -292,6 +293,8 @@ export default function IllustrationConfigurator({
             </div>
           </div>
 
+          <ProductCraftsmanship productName={product.name} />
+
           {children}
         </div>
       </div>
@@ -304,7 +307,7 @@ export default function IllustrationConfigurator({
             </p>
             <p className="font-display text-xl font-semibold text-charcoal">{formatPrice(price)}</p>
           </div>
-          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
+          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
             <WhatsAppIcon className="h-4 w-4" />
             Order now
           </a>

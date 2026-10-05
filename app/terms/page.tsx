@@ -13,49 +13,59 @@ export default function TermsPage() {
       intro="By browsing this site or placing an order with The Sofa Hub, you agree to these terms."
       sections={[
         {
-          heading: "Orders",
+          heading: "Order Placements & WhatsApp Confirmation",
           body: (
-            <p>
-              Orders are placed and confirmed on WhatsApp. A price quote becomes an order only once we confirm
-              availability and you accept. We may decline or cancel an order if stock, pricing, or delivery cannot be
-              fulfilled, and we&apos;ll tell you straight away.
-            </p>
+            <>
+              <p>
+                All sofa orders are initiated and finalized via direct communication with our sales specialists on WhatsApp. An order becomes officially binding only after we have confirmed stock availability, specifications (model, configuration, fabric, and colour), delivery postcode eligibility, and you have expressly agreed to the delivery date.
+              </p>
+              <p className="mt-3">
+                We reserve the right to decline or reschedule any order if manufacturing capacity, vehicle routing, or stock levels prevent safe and timely fulfilment.
+              </p>
+            </>
           ),
         },
         {
-          heading: "Prices",
+          heading: "Pricing & Currency",
           body: (
-            <p>
-              Prices on the website are in pounds sterling and include VAT where applicable. We aim to keep them
-              accurate, but confirmed WhatsApp quotes take priority if there&apos;s a mismatch.
-            </p>
+            <>
+              <p>
+                All prices displayed across the website are quoted in Pounds Sterling (£ GBP) and include standard mainland UK delivery. While we make every reasonable effort to keep online prices accurate and synchronized, confirmed written price quotations provided over WhatsApp take precedence in the event of any technical discrepancy.
+              </p>
+            </>
           ),
         },
         {
-          heading: "Payment",
+          heading: "Cash on Delivery (COD) & Payment Conditions",
           body: (
-            <p>
-              Payment is cash on delivery unless we agree otherwise in writing on WhatsApp. No deposit is taken online.
-            </p>
+            <>
+              <p>
+                Unless explicitly agreed otherwise in writing prior to delivery, all payments are due in full via Cash on Delivery upon physical arrival of your sofa suite.
+              </p>
+              <p className="mt-3">
+                No upfront deposit is demanded online. You are required to have the agreed cash amount ready for the delivery team once the sofa has been delivered and inspected in your property.
+              </p>
+            </>
           ),
         },
         {
-          heading: "Website content",
+          heading: "Customer Delivery Obligations & Access",
           body: (
-            <p>
-              Photos and descriptions are a guide. Natural variation in fabric and finishes can occur. Colours may look
-              slightly different on different screens.
-            </p>
+            <>
+              <p>
+                It is the customer&apos;s sole responsibility to ensure that doorways, entry hallways, stairwells, and the destination room provide adequate clearance for the purchased sofa dimensions. If access proves impossible due to unmeasured restrictions, our drivers may offer ground-floor alternatives or reschedule with appropriate modular pieces.
+              </p>
+            </>
           ),
         },
         {
-          heading: "Liability",
+          heading: "Consumer Statutory Rights & Governing Law",
           body: (
-            <p>
-              Nothing in these terms limits your statutory rights as a UK consumer. We&apos;re not liable for delays
-              caused by events outside our reasonable control, but we&apos;ll keep you informed and work to resolve
-              issues.
-            </p>
+            <>
+              <p>
+                Nothing contained within these Terms of Service shall affect, restrict, or limit your statutory legal rights under the Consumer Rights Act 2015. These terms are governed by and construed in accordance with the laws of England and Wales.
+              </p>
+            </>
           ),
         },
       ]}

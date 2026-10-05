@@ -35,7 +35,7 @@ export default function Footer() {
           <a
             href={whatsappLink()}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-linen/5 px-4 py-3 transition-colors hover:bg-linen/10"
           >
             <WhatsAppIcon className="h-6 w-6 text-whatsapp" />

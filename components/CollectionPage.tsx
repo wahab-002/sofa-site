@@ -139,7 +139,7 @@ export default function CollectionPage({ title, description, products, crumb, ac
           <a
             href={whatsappLink(`Hi, I'm looking at ${title}. Can you help me choose?`)}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             className="btn btn-light btn-md mt-6 self-start"
           >
             <WhatsAppIcon className="h-4 w-4 text-whatsapp" />

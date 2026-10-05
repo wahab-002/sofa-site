@@ -13,7 +13,7 @@ export default function FloatingWhatsApp() {
     <a
       href={whatsappLink("Hi, I have a question about your sofas.")}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="nofollow noopener noreferrer"
       aria-label="Chat on WhatsApp"
       className="group fixed bottom-5 right-5 z-40 flex items-center gap-2 rounded-full bg-whatsapp p-3.5 text-white shadow-lift transition-transform hover:scale-105 md:bottom-8 md:right-8"
     >

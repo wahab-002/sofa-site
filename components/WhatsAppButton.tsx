@@ -20,7 +20,7 @@ export default function WhatsAppButton({
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="nofollow noopener noreferrer"
       className={`btn btn-primary btn-lg group w-full ${className}`}
     >
       <WhatsAppIcon className="h-5 w-5 flex-shrink-0 text-whatsapp" />

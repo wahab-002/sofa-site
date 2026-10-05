@@ -9,6 +9,7 @@ import ProductGallery, { swatchStyle } from "./product/ProductGallery";
 import Icon, { WhatsAppIcon } from "./Icon";
 import { variantIllustration } from "@/lib/illustration";
 import { formatPrice, whatsappLink } from "@/lib/site";
+import ProductCraftsmanship from "./product/ProductCraftsmanship";
 
 type Props = {
   product: ProductWithDetails;
@@ -303,6 +304,8 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
             </div>
           </div>
 
+          <ProductCraftsmanship productName={productName} />
+
           {children}
         </div>
       </div>
@@ -317,7 +320,7 @@ export default function ProductConfigurator({ product, badge, fromPrice, childre
             </p>
             <p className="font-display text-xl font-semibold text-charcoal">{formatPrice(totalPrice)}</p>
           </div>
-          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
+          <a href={whatsappLink(whatsappMessage)} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-primary px-5 py-3 text-sm">
             <WhatsAppIcon className="h-4 w-4" />
             Order now
           </a>

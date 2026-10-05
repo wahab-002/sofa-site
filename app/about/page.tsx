@@ -99,7 +99,7 @@ export default function AboutPage() {
           <Link href="/shop/all" className="btn btn-primary btn-lg">
             Shop all sofas <Icon name="arrow" className="h-5 w-5" />
           </Link>
-          <a href={whatsappLink()} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-lg">
+          <a href={whatsappLink()} target="_blank" rel="nofollow noopener noreferrer" className="btn btn-secondary btn-lg">
             <WhatsAppIcon className="h-5 w-5 text-whatsapp" /> Chat on WhatsApp
           </a>
         </div>
